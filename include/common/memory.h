@@ -35,7 +35,6 @@
  * also copy data without any corruption.
  *
  * @param source pointer, destination pointer, length
- *
  * @return pointer to destination
  */
 uint8_t* my_memmove(uint8_t* src, uint8_t* dst, ​size_t ​length);
@@ -49,7 +48,6 @@ uint8_t* my_memmove(uint8_t* src, uint8_t* dst, ​size_t ​length);
  * although the copy should occur, data will likely be corrupted.
  *
  * @param source pointer, destination pointer, length
- *
  * @return pointer to destination
  */
 uint8_t* my_memcpy(uint8_t* src, uint8_t* dst, size_t length);
@@ -61,10 +59,9 @@ uint8_t* my_memcpy(uint8_t* src, uint8_t* dst, size_t length);
  * sets corresponding memory locations to a certain value.
  *
  * @param source pointer, length, value
- * 
  * @return pointer to the source
  */
-int8_t* my_memset(uint8_t* src, size_t length, uint8_t value);
+uint8_t* my_memset(uint8_t* src, size_t length, uint8_t value);
 
 /**
  * @brief function to set memory locations to zero
@@ -73,7 +70,6 @@ int8_t* my_memset(uint8_t* src, size_t length, uint8_t value);
  * sets corresponding memory locations to zero.
  *
  * @param source pointer, length
- *
  * @return pointer to the source
  */
 uint8_t* my_memzero(uint8_t* src, size_t length);
@@ -85,7 +81,6 @@ uint8_t* my_memzero(uint8_t* src, size_t length);
  * reverses the order of all the bytes.
  *
  * @param source pointer, length
- *
  * @return pointer to the source
  */
 uint8_t* my_reverse(uint8_t* src, size_t length);
@@ -96,7 +91,6 @@ uint8_t* my_reverse(uint8_t* src, size_t length);
  * This function allocates the designated number of words in dynamic memory.
  *
  * @param length
- *
  * @return pointer to start of allocated memory
  */
 int32_t* reserve_words(size_t length);
@@ -107,7 +101,6 @@ int32_t* reserve_words(size_t length);
  * This function frees up a dynamic memory allocation using a source pointer.
  *
  * @param source pointer
- *
  * @return void
  */
 void free_words(int32_t* src);
