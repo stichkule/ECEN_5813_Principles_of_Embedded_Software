@@ -9,8 +9,8 @@
  *
  *****************************************************************************/
 /**
- * @file project1_test.c 
- * @brief This file is to be used to project 1.
+ * @file project1.c 
+ * @brief This file is to be used with project 1.
  *
  * @author Alex Fosdick
  * @date April 2, 2017

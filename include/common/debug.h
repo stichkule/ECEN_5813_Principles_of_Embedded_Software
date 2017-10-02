@@ -9,7 +9,7 @@
  *
  *****************************************************************************/
 /**
- * @file memory.h 
+ * @file debug.h 
  * @brief This file is to be used with ECEN 5813 -- Project 1.
  *
  * This header file contains a prototype for the print_memory() function

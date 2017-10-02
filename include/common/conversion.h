@@ -9,7 +9,7 @@
  *
  *****************************************************************************/
 /**
- * @file memory.h 
+ * @file conversion.h 
  * @brief This file is to be used with ECEN 5813 -- Project 1.
  *
  * This header file contains prototypes for basic data manipulation functions

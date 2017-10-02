@@ -9,7 +9,7 @@
  *
  *****************************************************************************/
 /**
- * @file project1_memory.c 
+ * @file memory.c 
  * @brief Memory manipulation function definitions for project 1.
  *
  * @author Kyle Harlow
