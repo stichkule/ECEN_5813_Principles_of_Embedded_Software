@@ -11,7 +11,7 @@
 /**
  * @file conversion.c 
  * @brief Conversion function definitions for project 1.
- *
+ * These are functions that convert from an integer to ASCII, and ASCII to an integer and switches from big-little and little-big endian. 
  * @author Kyle Harlow
  * @author Shiril Tichkule
  * @date October 1, 2017

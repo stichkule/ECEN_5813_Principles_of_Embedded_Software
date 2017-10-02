@@ -11,7 +11,7 @@
 /**
  * @file main.c 
  * @brief Main function for project 1.
- *
+ * This file contains a function that runs project1 if the flag is set
  * @author Kyle Harlow
  * @author Shiril Tichkule
  * @date October 1, 2017

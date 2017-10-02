@@ -11,7 +11,7 @@
 /**
  * @file debug.c 
  * @brief Print memory function definition for project 1.
- *
+ * This file prints out memory to assist with Debugging. It uses printf and will only work on the host and BBB. 
  * @author Kyle Harlow
  * @author Shiril Tichkule
  * @date October 1, 2017
