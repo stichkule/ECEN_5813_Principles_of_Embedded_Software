@@ -14,24 +14,24 @@ CFLAGS = -Wall	\
 	 -Werror\
 	 -g	\
 	 -O0	\
-	 -std = C99
+	 -std=c99
 
 PFLAG = -DPROJECT1
-VFLAG = -VERBOSE
+VFLAG = -DVERBOSE
 
-ifeq($(PLATFORM),HOST)
+ifeq ($(PLATFORM),HOST)
 	CC = gcc
 	CPPFLAGS = $(PLAFG) \
 		   $(VFLAG)
 endif
 
-ifeq($(PLATFORM),BBB)
+ifeq ($(PLATFORM),BBB)
 	CC = arm-linux-gnueabihf
 	CPPFLAGS = $(PLAFG) \
-		   $(VFLAG) \
+		   $(VFLAG)
 endif
 
-ifeq($(PLATFORM),KL25Z)
+ifeq ($(PLATFORM),KL25Z)
 	CC = arm-linux-none-eabi-gcc
 	CPPFLAGS = $(PLAFG)
 	LDFLAGS = ../platform/MKL25Z128xxx4_flash.ld
@@ -50,21 +50,21 @@ DEP = $(SRCS:.c=.dep)
 
 #Preprocessor target rule
 %.i : %.c
-	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) -E $< $@
+	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) -E $< -o $@
 
 #Assembly target rule
 %.asm : %.c
-	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) -S $< $@
+	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) -S $< -o $@
 
 #Object file target rule
 %.o : $(SRCS)
-	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) -c $^ $@
+	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) -c $^ -o $@
 
 #compile_all target rule
 .PHONY: compile_all
 compile_all: $(OBJECTS)
 $(OBJECTS): $(SRCS)
-	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) -c $^ $@
+	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) -c $^ -o $@
 
 #built target rule
 .PHONY: build

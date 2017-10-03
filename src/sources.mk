@@ -5,26 +5,25 @@
 # permitted to modify this and use it to learn about the field of embedded
 # software. Shiril Tichkule, Kyle Harlow, and the University of Colorado are
 # not liable for any misuse of this material.
-#
+
 # Includes and Sources for Project 1
-#
-ifeq($(PLATFORM),HOST)
-	INCLUDES = ./include/common
+ifeq ($(PLATFORM),HOST)
+INCLUDES = -I ../include/common
 endif
 
-ifeq($(PLATFORM),BBB)
-	INCLUDES = ./include/common
+ifeq ($(PLATFORM),BBB)
+INCLUDES = -I ../include/common
 endif
 
-ifeq($(PLATFORM),KL25Z)
-	INCLUDES = -I ./include/common	\
-             	-I ./include/kl25z	\
-             	-I ./include/CMSIS
+ifeq ($(PLATFORM),KL25Z)
+INCLUDES = \
+	-I ../include/commom \
+	-I ../include/kl25z \
+	-I ../include/CMSIS
 endif
-
-	SRCS = 	main.c		\
-		project1.c	\
-		memory.c	\
-		conversion.c	\
-		debug.c
-
+SRCS = \
+	main.c		\
+	project1.c	\
+	memory.c	\
+	conversion.c	\
+	debug.c
