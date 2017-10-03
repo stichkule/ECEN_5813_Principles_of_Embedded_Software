@@ -32,7 +32,7 @@ ifeq ($(PLATFORM),BBB)
 endif
 
 ifeq ($(PLATFORM),KL25Z)
-	CC = arm-linux-none-eabi-gcc
+	CC = arm-none-eabi-gcc
 	CPPFLAGS = $(PLAFG)
 	LDFLAGS = ../platform/MKL25Z128xxx4_flash.ld
 	ARCH = -mcpu = cortex-m0plus  \
@@ -61,16 +61,29 @@ DEP = $(SRCS:.c=.dep)
 	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) -c $^ -o $@
 
 #compile_all target rule
-.PHONY: compile_all
-compile_all: $(OBJECTS)
+.PHONY: compile-all
+compile-all: $(OBJECTS)
 $(OBJECTS): $(SRCS)
 	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) -c $^
 
+.PHONY: dependencies
+dependencies: $(DEP)
+main.dep: main.c 
+	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) $(LDFLAGS) -M $< > $@
+project1.dep: project1.c
+	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) $(LDFLAGS) -M $< > $@
+conversion.dep: conversion.c
+	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) $(LDFLAGS) -M $< > $@
+debug.dep: debug.c
+	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) $(LDFLAGS) -M $< > $@
+memory.dep: memory.c	
+	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) $(LDFLAGS) -M $< > $@
+
 #built target rule
 .PHONY: build
-build: project1.elf
-project1.elf: $(OBJECTS)
-	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) $(LDFLAGS) -o $@ $(OBJECTS) -M -MAP=project1.map
+build: project1.elf $(DEP)
+project1.elf: $(OBJECTS) $(SRCS)
+	$(CC) -o $@ $(OBJECTS) $(CFLAGS) -Wl,-Map=project1.map $(INCLUDES) -lm $(CPPFLAGS) $(LDFLAGS) 
 
 #clean target rule
 .PHONY: clean
