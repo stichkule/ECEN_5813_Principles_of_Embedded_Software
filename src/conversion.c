@@ -51,7 +51,7 @@ uint8_t my_itoa(int32_t data, uint8_t * ptr, uint32_t base){
 	return i;
 }
 
-uint32_t my_atoi(uint8_t * ptr, uint8_t digits, uint32_t base){
+int32_t my_atoi(uint8_t * ptr, uint8_t digits, uint32_t base){
 	int32_t sum = 0;
 	uint8_t i;
 	for(i = 0; i < digits; i++){
@@ -73,7 +73,7 @@ uint32_t my_atoi(uint8_t * ptr, uint8_t digits, uint32_t base){
 
 int8_t big_to_little32(uint32_t * data, uint32_t length)
 {
-	if(legnth <= 0) return -1;
+	if(length <= 0) return -1;
 	uint8_t temp; 
 	uint8_t i,k;
 	uint32_t * temp_ptr;
