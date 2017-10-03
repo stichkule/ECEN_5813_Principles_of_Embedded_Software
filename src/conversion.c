@@ -28,7 +28,10 @@ uint8_t my_itoa(int32_t data, uint8_t * ptr, uint32_t base){
 	uint8_t i = 0;
 	uint8_t mod;
 	uint8_t sign = 0;
-	if(data < 0) sign = 1;
+	if(data < 0){
+		sign = 1;
+		data *= -1;
+	}
 	while(data > 0)
 	{
 		mod = data % base;
@@ -43,7 +46,7 @@ uint8_t my_itoa(int32_t data, uint8_t * ptr, uint32_t base){
 	}
 	if(sign)
 	{
-		*(ptr+i+1)='-';
+		*(ptr+i+1)=45;
 		i++;
 	}
 	ptr = my_reverse(ptr,i*sizeof(uint8_t));
@@ -54,18 +57,19 @@ uint8_t my_itoa(int32_t data, uint8_t * ptr, uint32_t base){
 int32_t my_atoi(uint8_t * ptr, uint8_t digits, uint32_t base){
 	int32_t sum = 0;
 	uint8_t i;
+	
 	for(i = 0; i < digits; i++){
-		if(*(ptr+digits-i)>=48 && *(ptr+digits-i)<=57)
+		if(*(ptr+digits-1-i)>=48 && *(ptr+digits-1-i)<=57)
 		{
-			sum += (*(ptr+digits-i)-48) * pow(base,i);
+			sum += (*(ptr+digits-1-i)-48) * pow(base,i);
 		}
-		else if(*(ptr+digits-i)>=65 && *(ptr+digits-i)<=70)
+		else if(*(ptr+digits-1-i)>=65 && *(ptr+digits-1-i)<=70)
 		{
-			sum += (*(ptr+digits-i)-55) * pow(base,i);
+			sum += (*(ptr+digits-1-i)-55) * pow(base,i);
 		}
-		else if(*(ptr+digits-i)==45)
+		else if(*(ptr+digits-1-i)=='-')
 		{
-			sum*=-1;
+			sum = -1*sum;
 		}
 	}
 	return sum;

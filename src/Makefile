@@ -21,7 +21,7 @@ VFLAG = -DVERBOSE
 
 ifeq ($(PLATFORM),HOST)
 	CC = gcc
-	CPPFLAGS = $(PLAFG) \
+	CPPFLAGS = $(PFLAG) \
 		   $(VFLAG)
 endif
 

@@ -42,6 +42,9 @@ int8_t test_data1() {
   digits = my_itoa( num, ptr, 16);   
   value = my_atoi( ptr, digits, 16);
   #ifdef VERBOSE
+  for(uint8_t i=0; i<digits; i++){
+	printf(" String %c\n", *(ptr+i));
+  }
   printf("  Initial number: %d\n", num);  
   printf("  Final Decimal number: %d\n", value);  
   #endif
