@@ -57,14 +57,14 @@ DEP = $(SRCS:.c=.dep)
 	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) -S $< -o $@
 
 #Object file target rule
-%.o : $(SRCS)
+%.o : %.c
 	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) -c $^ -o $@
 
 #compile_all target rule
 .PHONY: compile_all
 compile_all: $(OBJECTS)
 $(OBJECTS): $(SRCS)
-	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) -c $^ -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) -c $^
 
 #built target rule
 .PHONY: build

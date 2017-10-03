@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include "memory.h"
 
-uint8_t* my_memmove(uint8_t* src, uint8_t* dst, ​size_t ​length)
+uint8_t* my_memmove(uint8_t* src, uint8_t* dst, size_t length)
 {
   int32_t distance = dst - src; // get distance of destination from source
   uint32_t i;

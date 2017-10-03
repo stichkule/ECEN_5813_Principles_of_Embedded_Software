@@ -37,7 +37,7 @@
  * @param source pointer, destination pointer, length
  * @return pointer to destination
  */
-uint8_t* my_memmove(uint8_t* src, uint8_t* dst, ​size_t ​length);
+uint8_t* my_memmove(uint8_t* src, uint8_t* dst, size_t length);
 
 /**
  * @brief function to copy data from source location to destination
