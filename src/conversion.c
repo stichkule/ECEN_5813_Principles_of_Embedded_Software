@@ -20,6 +20,7 @@
 
 #include <stdint.h>
 #include <stdlib.h>
+#include "conversion.h"
 #include "memory.h"
 
 uint8_t my_itoa(int32_t data, uint8_t * ptr, uint32_t base){

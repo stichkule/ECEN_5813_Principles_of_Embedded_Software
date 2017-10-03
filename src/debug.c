@@ -20,6 +20,7 @@
 
 #include <stdio.h>
 #include <stdint.h>
+#include "platform.h"
 #include "debug.h"
 
 void print_memory(uint8_t * start, uint32_t length){
