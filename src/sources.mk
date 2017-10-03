@@ -9,21 +9,22 @@
 # Includes and Sources for Project 1
 #
 ifeq($(PLATFORM),HOST)
-  INCLUDES = ./include/common
+	INCLUDES = ./include/common
 endif
 
 ifeq($(PLATFORM),BBB)
-  INCLUDES = ./include/common
+	INCLUDES = ./include/common
 endif
 
 ifeq($(PLATFORM),KL25Z)
-  INCLUDES = -I ./include/common  \
-             -I ./include/kl25z   \
-             -I ./include/CMSIS
-
-  SRCS = main.c        \
-         project1.c    \
-         memory.c      \
-         conversion.c  \
-         debug.c
+	INCLUDES = -I ./include/common	\
+             	-I ./include/kl25z	\
+             	-I ./include/CMSIS
 endif
+
+	SRCS = 	main.c		\
+		project1.c	\
+		memory.c	\
+		conversion.c	\
+		debug.c
+
