@@ -93,7 +93,7 @@ uint8_t* my_reverse(uint8_t* src, size_t length);
  * @param length
  * @return pointer to start of allocated memory
  */
-int32_t* reserve_words(size_t length);
+uint32_t* reserve_words(size_t length);
 
 /**
  * @brief function to free memory
@@ -103,6 +103,6 @@ int32_t* reserve_words(size_t length);
  * @param source pointer
  * @return void
  */
-void free_words(int32_t* src);
+void free_words(uint32_t* src);
 
 #endif /* __MEMORY_H__ */

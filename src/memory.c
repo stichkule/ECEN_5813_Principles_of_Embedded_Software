@@ -109,14 +109,14 @@ uint8_t* my_reverse(uint8_t* src, size_t length)
   return src;
 }
 
-int32_t* reserve_words(size_t length)
+uint32_t* reserve_words(size_t length)
 {
-  int32_t* src; // pointer to reserved memory space
-  src = malloc(length*sizeof(int32_t*)); // allocate memory big enough to hold 'length' number of int32_t data
+  uint32_t* src; // pointer to reserved memory space
+  src = malloc(length*sizeof(uint32_t*)); // allocate memory big enough to hold 'length' number of uint32_t data
   return (src==NULL)?NULL:src; // return NULL if allocations fails, else return pointer to memory
 }
 
-void free_words(int32_t* src)
+void free_words(uint32_t* src)
 {
   free(src); // free memory allocated by a previous malloc() operation
 }
