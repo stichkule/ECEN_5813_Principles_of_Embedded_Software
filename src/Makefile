@@ -11,23 +11,29 @@ include sources.mk
 
 # General flags (common to both platforms)
 CFLAGS = -Wall  \
-         -Werr  \
+         -Werror\
          -g     \
          -O0    \
          -std = C99
 
+PFLAG = -DPROJECT1
+VFLAG = -VERBOSE
+
 ifeq($(PLATFORM),HOST)
   CC = gcc
-  CPPFLAGS = -DPROJECT1
+  CPPFLAGS = $(PLAFG) \
+           = $(VFLAG) \
 endif
 
 ifeq($(PLATFORM),BBB)
   CC = arm-linux-gnueabihf
-  CPPFLAGS = -DPROJECT1
+  CPPFLAGS = $(PLAFG) \
+           = $(VFLAG) \
 endif
 
 ifeq($(PLATFORM),KL25Z)
-  CC = arm-linux-none-eabi-gcc 
+  CC = arm-linux-none-eabi-gcc
+  CPPFLAGS = $(PLAFG)
   LDFLAGS = ../platform/MKL25Z128xxx4_flash.ld
   ARCH = -mcpu = cortex-m0plus  \
          -mthumb                \
@@ -35,4 +41,41 @@ ifeq($(PLATFORM),KL25Z)
          -mfpu = fpv4-sp-d16    \
          --specs = nosys.specs    
 endif
+
+#Target rules
+OBJECTS = $(SRCS:.c=.o)
+ASM = $(SRCS:.c=.asm)
+PPOUT = $(SRCS:.c=.i)
+DEP = $(SRCS:.c=.dep)
+
+#Preprocessor target rule
+%.i : %.c
+    $(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) -E $< $@
+
+#Assembly target rule
+%.asm : %.c
+    $(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) -S $< $@
+
+#Object file target rule
+%.o : $(SRCS)
+    $(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) -c $^ $@
+
+#compile_all target rule
+.PHONY: compile_all
+compile_all: $(OBJECTS)
+$(OBJECTS): $(SRCS)
+          $(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) -c $^ $@
+
+#built target rule
+.PHONY: build
+build: project1.elf
+project1.elf: $(OBJECTS)
+          $(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) $(LDFLAGS) -o $@ $(OBJECTS) -M -MAP=project1.map
+
+#clean target rule
+.PHONY: clean
+clean: 
+     rm project1.map project1.elf $(OBJECTS) $(ASM) $(PPOUT) $(DEP)
+
+
 
