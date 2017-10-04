@@ -68,16 +68,8 @@ $(OBJECTS): $(SRCS)
 
 .PHONY: dependencies
 dependencies: $(DEP)
-main.dep: main.c 
-	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) $(LDFLAGS) -M $< > $@
-project1.dep: project1.c
-	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) $(LDFLAGS) -M $< > $@
-conversion.dep: conversion.c
-	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) $(LDFLAGS) -M $< > $@
-debug.dep: debug.c
-	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) $(LDFLAGS) -M $< > $@
-memory.dep: memory.c	
-	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) $(LDFLAGS) -M $< > $@
+%.dep:%.c
+	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) -M $^ > $@	
 
 #built target rule
 .PHONY: build
@@ -88,4 +80,4 @@ project1.elf: $(OBJECTS) $(SRCS)
 #clean target rule
 .PHONY: clean
 clean:
-	rm project1.map project1.elf $(OBJECTS) $(ASM) $(PPOUT) $(DEP)
+	rm -rf *.o *.i *.asm *.s *.map *.dep project1.elf
