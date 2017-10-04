@@ -44,7 +44,7 @@ uint8_t* my_memmove(uint8_t* src, uint8_t* dst, size_t length)
     }
   }
   else
-    for(i=length-1;i>=0;i--) // finite distance, but no overlap
+    for(i=0; i<=length-1; i++) // finite distance, but no overlap
     {
       *(dst+i) = *(src+i);
     }
@@ -58,7 +58,7 @@ uint8_t* my_memcpy(uint8_t* src, uint8_t* dst, size_t length)
     return src;
   else if (dst > src) // if destination occurs after source in memory
   {
-    for(i=length-1;i>=0;i--) // copy memory locations without checking for overlap (data corruption may occur)
+    for(i=0; i<=length-1; i++) // copy memory locations without checking for overlap (data corruption may occur)
     {
       *(dst+i) = *(src+i);
     }
