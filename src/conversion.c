@@ -46,11 +46,11 @@ uint8_t my_itoa(int32_t data, uint8_t * ptr, uint32_t base){
 	}
 	if(sign)
 	{
-		*(ptr+i+1)=45;
+		*(ptr+i)=45;
 		i++;
 	}
 	ptr = my_reverse(ptr,i*sizeof(uint8_t));
-	*(ptr+i+1) = '\0';
+	*(ptr+i) = '\0';
 	return i;
 }
 
