@@ -26,7 +26,7 @@ ifeq ($(PLATFORM),HOST)
 endif
 
 ifeq ($(PLATFORM),BBB)
-	CC = arm-linux-gnueabihf
+	CC = arm-linux-gnueabihf-gcc
 	CPPFLAGS = $(PLAFG) \
 		   $(VFLAG)
 endif
