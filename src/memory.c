@@ -26,19 +26,19 @@
 uint8_t* my_memmove(uint8_t* src, uint8_t* dst, size_t length)
 {
   int32_t distance = dst - src; // get distance of destination from source
-  uint32_t i;
+  int32_t i;
   if (distance == 0) // if destination and source addresses overlap excatly, no need to move data
     return src;
   else if (distance > 0 && distance < length) // if distance is positive, but less than length, we have overlap
   {
-    for(i=length-1;i>=distance;i--) // only move non-overlapping memory locations (no data corruption)
+    for(i=length-1;i>=0;i--) // only move non-overlapping memory locations (no data corruption)
     {
       *(dst+i) = *(src+i);
     }
   }
   else if (distance < 0 && abs(distance) < length) // overlap occurs, but distance is negative (dst < src)
   {
-    for(i=0;i<abs(distance);i++) // only move non-overlapping memory locations
+    for(i=0;i<=length-1;i++) // only move non-overlapping memory locations
     {  
       *(dst+i) = *(src+i);
     }
@@ -53,7 +53,7 @@ uint8_t* my_memmove(uint8_t* src, uint8_t* dst, size_t length)
 
 uint8_t* my_memcpy(uint8_t* src, uint8_t* dst, size_t length)
 {
-  uint32_t i;
+  int32_t i;
   if (src == dst) // if destination and source addresses overlap excatly, no need to copy data
     return src;
   else if (dst > src) // if destination occurs after source in memory
