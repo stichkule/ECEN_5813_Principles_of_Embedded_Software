@@ -22,9 +22,11 @@
 #include "project1.h"
 #include "debug.h"
 
-int main(void){
+int main(void)
+{
+  /* Calls a compile time switch for project1 */
   #ifdef PROJECT1
-	project1();
+    project1();
   #endif
   return 0;
 }

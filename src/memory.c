@@ -11,7 +11,7 @@
 /**
  * @file memory.c 
  * @brief Memory manipulation function definitions for project 1.
- *
+ * This file edits memory by moving, copying, setting, allocating and freeing. 
  * @author Kyle Harlow
  * @author Shiril Tichkule
  * @date September 29, 2017
