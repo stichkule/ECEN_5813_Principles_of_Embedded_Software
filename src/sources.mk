@@ -17,7 +17,7 @@ endif
 
 ifeq ($(PLATFORM),KL25Z)
 INCLUDES = \
-	-I ../include/commom \
+	-I ../include/common \
 	-I ../include/kl25z \
 	-I ../include/CMSIS
 endif

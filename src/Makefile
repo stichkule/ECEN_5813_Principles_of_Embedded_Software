@@ -27,19 +27,19 @@ endif
 
 ifeq ($(PLATFORM),BBB)
 	CC = arm-linux-gnueabihf-gcc
-	CPPFLAGS = $(PLAFG) \
+	CPPFLAGS = $(PFLAG) \
 		   $(VFLAG)
 endif
 
 ifeq ($(PLATFORM),KL25Z)
 	CC = arm-none-eabi-gcc
-	CPPFLAGS = $(PLAFG)
-	LDFLAGS = ../platform/MKL25Z128xxx4_flash.ld
-	ARCH = -mcpu = cortex-m0plus  \
-	       -mthumb                \
-	       -mfloat-abi = softfp   \
-	       -mfpu = fpv4-sp-d16    \
-	       --specs = nosys.specs    
+	CPPFLAGS = $(PFLAG)
+	LDFLAGS = -Xlinker -T ../platform/MKL25Z128xxx4_flash.ld
+	ARCH = -mcpu=cortex-m0  \
+	       -mthumb\
+	       -mfloat-abi=softfp   \
+	       -mfpu=fpv4-sp-d16    \
+	       --specs=nosys.specs    
 endif
 
 #Target rules
@@ -50,32 +50,32 @@ DEP = $(SRCS:.c=.dep)
 
 #Preprocessor target rule
 %.i : %.c
-	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) -E $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) $(ARCH) -E $< -o $@
 
 #Assembly target rule
 %.asm : %.c
-	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) -S $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) $(ARCH) -S $< -o $@
 
 #Object file target rule
 %.o : %.c
-	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) -c $^ -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) $(ARCH) -c $^ -o $@
 
 #compile_all target rule
 .PHONY: compile-all
 compile-all: $(OBJECTS)
 $(OBJECTS): $(SRCS)
-	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) -c $^
+	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) $(ARCH) -c $^
 
 .PHONY: dependencies
 dependencies: $(DEP)
 %.dep:%.c
-	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) -M $^ > $@	
+	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) $(ARCH) -M $^ > $@	
 
 #built target rule
 .PHONY: build
 build: project1.elf $(DEP)
 project1.elf: $(OBJECTS) $(SRCS)
-	$(CC) -o $@ $(OBJECTS) $(CFLAGS) -Wl,-Map=project1.map $(INCLUDES) -lm $(CPPFLAGS) $(LDFLAGS) 
+	$(CC) -o $@ $(OBJECTS) $(CFLAGS) -Wl,-Map=project1.map $(INCLUDES) -lm $(LDFLAGS) $(ARCH) $(CPPFLAGS) 
 
 #clean target rule
 .PHONY: clean
