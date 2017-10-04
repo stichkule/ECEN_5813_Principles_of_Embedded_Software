@@ -73,11 +73,13 @@ dependencies: $(DEP)
 
 #built target rule
 .PHONY: build
-build: project1.elf $(DEP)
+build: project1.elf $(DEP) size.txt
 project1.elf: $(OBJECTS) $(SRCS)
-	$(CC) -o $@ $(OBJECTS) $(CFLAGS) -Wl,-Map=project1.map $(INCLUDES) -lm $(LDFLAGS) $(ARCH) $(CPPFLAGS) 
+	$(CC) -o $@ $(OBJECTS) $(CFLAGS) -Wl,-Map=project1.map $(INCLUDES) -lm $(LDFLAGS) $(ARCH) $(CPPFLAGS)
+size.txt: project1.elf
+	size --format=SysV $< > size.txt 
 
 #clean target rule
 .PHONY: clean
 clean:
-	rm -rf *.o *.i *.asm *.s *.map *.dep project1.elf
+	rm -rf *.o *.i *.asm *.s *.map *.dep project1.elf size.txt
