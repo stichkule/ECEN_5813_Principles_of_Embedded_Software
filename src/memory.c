@@ -25,6 +25,7 @@
 
 uint8_t* my_memmove(uint8_t* src, uint8_t* dst, size_t length)
 {
+  if (src == NULL || dst == NULL){ return NULL; }
   int32_t distance = dst - src; // get distance of destination from source
   int32_t i;
   if (distance == 0) // if destination and source addresses overlap excatly, no need to move data
@@ -53,6 +54,7 @@ uint8_t* my_memmove(uint8_t* src, uint8_t* dst, size_t length)
 
 uint8_t* my_memcpy(uint8_t* src, uint8_t* dst, size_t length)
 {
+  if (src == NULL || dst == NULL){ return NULL; }
   int32_t i;
   if (src == dst) // if destination and source addresses overlap excatly, no need to copy data
     return src;
@@ -75,6 +77,7 @@ uint8_t* my_memcpy(uint8_t* src, uint8_t* dst, size_t length)
 
 uint8_t* my_memset(uint8_t* src, size_t length, uint8_t value)
 {
+  if (src == NULL) { return NULL; }
   uint32_t i;
   for(i=0;i<=length-1;i++) // set memory location contents to value
     {
@@ -85,6 +88,7 @@ uint8_t* my_memset(uint8_t* src, size_t length, uint8_t value)
 
 uint8_t* my_memzero(uint8_t* src, size_t length)
 {
+  if (src == NULL) { return NULL; }
   uint32_t i;
   for(i=0;i<=length-1;i++) // set memory location contents to zero
     {
@@ -95,6 +99,7 @@ uint8_t* my_memzero(uint8_t* src, size_t length)
 
 uint8_t* my_reverse(uint8_t* src, size_t length)
 {
+  if (src == NULL) { return NULL; }
   uint8_t* start = src; // create pointers to start and end of memory segment to be reversed
   uint8_t* end = src+length-1;
   uint8_t temp;
