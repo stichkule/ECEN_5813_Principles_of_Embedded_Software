@@ -126,7 +126,7 @@ CB_status CB_buffer_remove_item(CB_t * circ_buff, uint8_t* data_ptr)
 }
 
 
-int main(void)
+/*int main(void)
 {
   CB_t * circ_buff = malloc(sizeof(CB_t));
   CB_status error = CB_init(circ_buff, 4);
@@ -143,4 +143,4 @@ int main(void)
   error = CB_buffer_add_item(circ_buff, 1);
   printf("This is the error adding to a null buffer %d\n", error);
   return 0;
-}
+}*/
