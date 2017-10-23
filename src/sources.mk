@@ -21,9 +21,9 @@ INCLUDES = \
 	-I ../include/kl25z \
 	-I ../include/CMSIS
 endif
-SRCS = \
-	main.c		\
-	project1.c	\
-	memory.c	\
-	conversion.c	\
-	debug.c
+SRCS = *.c
+#	main.c		\
+#	project1.c	\
+#	memory.c	\
+#	conversion.c	\
+#	debug.c
