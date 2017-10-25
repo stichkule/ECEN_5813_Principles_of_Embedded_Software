@@ -15,7 +15,7 @@ CFLAGS = -Wall	\
 	 -g	\
 	 -O0	\
 	 -std=c99
-
+CC = gcc
 PFLAG = -DPROJECT1
 VFLAG = -DVERBOSE
 
@@ -63,8 +63,8 @@ DEP = $(SRCS:.c=.dep)
 #compile modules for unit tests
 .PHONY: unittests
 unittests: unittests.elf
-unittests.elf: $(OBJECTS) unittests.c
-	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) $(ARCH) -lm -lcmocka $^ -o $@
+unittests.elf: unittests.c conversion.c memory.c CircularBuffer.c
+	$(CC) $(INCLUDES) $^ -lcmocka -lm -o $@
 
 #compile_all target rule
 .PHONY: compile-all
@@ -88,4 +88,4 @@ size.txt: project1.elf
 #clean target rule
 .PHONY: clean
 clean:
-	rm -rf *.o *.i *.asm *.s *.map *.dep project1.elf size.txt
+	rm -rf *.o *.i *.asm *.s *.map *.dep *.elf size.txt

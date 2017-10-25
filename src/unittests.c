@@ -6,10 +6,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include "memory.h"
-#include "memory.c"
 #include "conversion.h"
-
-//#include "conversion.c"
 
 static void test_my_memmove(void **state)
 {
