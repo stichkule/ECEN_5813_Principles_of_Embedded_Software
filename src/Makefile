@@ -64,7 +64,7 @@ DEP = $(SRCS:.c=.dep)
 .PHONY: unittests
 unittests: unittests.elf
 unittests.elf: $(OBJECTS) unittests.c
-  $(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) $(ARCH) -lm -lcmocka $^ -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) $(ARCH) -lm -lcmocka $^ -o $@
 
 #compile_all target rule
 .PHONY: compile-all
