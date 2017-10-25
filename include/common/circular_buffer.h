@@ -74,7 +74,7 @@ typedef enum
  * @param pointer to circular buffer, length
  * @return operation status of circular buffer
  */
-CB_status CB_init(CB_t * circ_buff, uint16_t length)
+CB_status CB_init(CB_t * circ_buff, uint16_t length);
 
 /**
  * @brief function to destroy circular buffer
@@ -85,7 +85,7 @@ CB_status CB_init(CB_t * circ_buff, uint16_t length)
  * @param pointer to circular buffer
  * @return operation status of circular buffer
  */
-CB_status CB_destroy(CB_t* circ_buff)
+CB_status CB_destroy(CB_t* circ_buff);
 
 /**
  * @brief function to check if circular buffer is full
@@ -96,7 +96,7 @@ CB_status CB_destroy(CB_t* circ_buff)
  * @param pointer to circular buffer
  * @return operation status of circular buffer
  */
-CB_status CB_is_full(CB_t * circ_buff)
+CB_status CB_is_full(CB_t * circ_buff);
 
 /**
  * @brief function to check if circular buffer is empty
@@ -107,7 +107,7 @@ CB_status CB_is_full(CB_t * circ_buff)
  * @param pointer to circular buffer
  * @return operation status of circular buffer
  */
-CB_status CB_is_empty(CB_t * circ_buff)
+CB_status CB_is_empty(CB_t * circ_buff);
 
 /**
  * @brief function to add item to circular buffer
@@ -118,7 +118,7 @@ CB_status CB_is_empty(CB_t * circ_buff)
  * @param pointer to circular buffer, data item to be added
  * @return operation status of circular buffer
  */
-CB_status CB_buffer_add_item(CB_t * circ_buff, uint8_t data)
+CB_status CB_buffer_add_item(CB_t * circ_buff, uint8_t data);
 
 /**
  * @brief function to remove item from circular buffer
@@ -130,6 +130,6 @@ CB_status CB_buffer_add_item(CB_t * circ_buff, uint8_t data)
  * @param pointer to circular buffer, pointer to data removed 
  * @return operation status of circular buffer
  */
-CB_status CB_buffer_remove_item(CB_t * circ_buff, uint8_t* data_ptr)
+CB_status CB_buffer_remove_item(CB_t * circ_buff, uint8_t* data_ptr);
 
 #endif /* __CIRCULAR_BUFFER_H__ */

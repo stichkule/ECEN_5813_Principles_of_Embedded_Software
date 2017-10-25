@@ -1,25 +1,6 @@
 #include <stdint.h>
-#include <stdio.h>
 #include <stdlib.h>
-
-typedef struct
-{
-  uint8_t * buf;
-  uint8_t * head;
-  uint8_t * tail;
-  uint16_t size;
-  uint16_t count;
-}CB_t;
-
-typedef enum
-{
-  CB_NO_ERROR,
-  CB_FULL,
-  CB_EMPTY, 
-  CB_NULL_PTR,
-  CB_NO_LENGTH,
-  CB_BUFFER_ALLOCATION_FAILURE
-}CB_status;
+#include "circular_buffer.h"
 
 CB_status CB_init(CB_t * circ_buff, uint16_t length)
 {

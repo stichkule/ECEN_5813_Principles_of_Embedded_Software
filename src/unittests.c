@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include "memory.h"
 #include "conversion.h"
+#include "circular_buffer.h"
 
 static void test_my_memmove(void **state)
 {
@@ -243,6 +244,100 @@ static void test_little_to_big32(void **state)
   }
 }
 
+static void test_CB_init_destroy(void **state)
+{
+  (void) state;
+  CB_t * circ_buff = NULL;
+  uint16_t length = 8;
+  int8_t rv;
+
+  /* test for circ_buff = NULL */
+  rv = CB_init(circ_buff,length);
+  assert_int_equal(rv,3);
+
+  /* check for initialization of circ_buff */
+  circ_buff = malloc(sizeof(CB_t));
+  rv = CB_init(circ_buff,length);
+  assert_int_equal(rv,0);
+
+  /* check for circ_buff destroy*/  
+  rv = CB_destroy(circ_buff);
+  assert_int_equal(rv,0);
+}
+
+static void test_CB_add_remove(void **state)
+{
+  (void) state;
+  CB_t * circ_buff = NULL;
+  uint16_t length = 8;
+  int8_t rv;
+  uint8_t data = 0x26;
+  uint8_t temp;
+  uint8_t * removed_data = &temp;
+
+  /* Initialize and add data to circular buffer */
+  circ_buff = malloc(sizeof(CB_t));
+  rv = CB_init(circ_buff,length);
+  rv = CB_buffer_add_item(circ_buff,data);
+  assert_int_equal(rv,0);
+
+  /* Remove added data and check if they match */
+  rv = CB_buffer_remove_item(circ_buff, removed_data);
+  assert_int_equal(data,*(removed_data));
+}
+  
+static void test_CB_empty_full_wrap(void **state)
+{
+  (void) state;
+  CB_t * circ_buff = NULL;
+  uint16_t length = 8;
+  int8_t rv;
+  uint8_t data;
+  uint8_t temp;
+  uint8_t * removed_data = &temp; 
+  uint8_t i;
+
+  /* Create the buffer */
+  circ_buff = malloc(sizeof(CB_t));
+  rv = CB_init(circ_buff,length);
+  rv = CB_is_empty(circ_buff);
+  assert_int_equal(rv,2);
+
+  /* Check read from empty buffer */
+  rv = CB_buffer_remove_item(circ_buff, removed_data);
+  assert_int_equal(rv,2);
+
+  /* Populate the buffer */
+  for(i=0;i<length;i++)
+  {
+    rv = CB_buffer_add_item(circ_buff,i);
+  }
+
+  /* Check for full buffer */
+  rv = CB_is_full(circ_buff);
+  assert_int_equal(rv,1);
+
+  /* Add item to full buffer */
+  rv = CB_buffer_add_item(circ_buff,i+1);
+  assert_int_equal(rv,1);
+
+  /* Remove 2 items to check for wrap add */
+  rv = CB_buffer_remove_item(circ_buff, removed_data);
+  rv = CB_buffer_remove_item(circ_buff, removed_data);
+
+  /* Add 1 item back */
+  rv = CB_buffer_add_item(circ_buff,42);
+  assert_int_equal(rv,0);
+  assert_int_equal(*(circ_buff->head-1),42);
+
+  /* Remove 3 items */
+  for(i=0;i<length-1;i++)
+  {
+    rv = CB_buffer_remove_item(circ_buff,removed_data);
+  }
+  assert_int_equal(*(removed_data),42);
+}
+
 int main(void)
 {
   const struct CMUnitTest tests[] = {
@@ -251,7 +346,10 @@ int main(void)
     cmocka_unit_test(test_my_memzero),
     cmocka_unit_test(test_my_reverse),
     cmocka_unit_test(test_big_to_little32),
-    cmocka_unit_test(test_little_to_big32)
+    cmocka_unit_test(test_little_to_big32),
+    cmocka_unit_test(test_CB_init_destroy),
+    cmocka_unit_test(test_CB_add_remove),
+    cmocka_unit_test(test_CB_empty_full_wrap)
   };
   return cmocka_run_group_tests(tests, NULL, NULL);
 }
