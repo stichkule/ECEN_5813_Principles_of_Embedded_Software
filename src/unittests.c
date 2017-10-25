@@ -203,7 +203,7 @@ static void test_big_to_little32(void **state)
   uint32_t length = 2;
   uint32_t data[length];
   uint32_t * src = NULL;
-  uint8_t i,j;
+  uint8_t i;
 
   /* test for src = NULL */
   rv = big_to_little32(src,length);
