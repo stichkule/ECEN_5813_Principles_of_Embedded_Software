@@ -60,6 +60,12 @@ DEP = $(SRCS:.c=.dep)
 %.o : %.c
 	$(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) $(ARCH) -c $^ -o $@
 
+#compile modules for unit tests
+.PHONY: unittests
+unittests: unittests.elf
+unittests.elf: $(OBJECTS) unittests.c
+  $(CC) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) $(ARCH) -lm -lcmocka $^ -o $@
+
 #compile_all target rule
 .PHONY: compile-all
 compile-all: $(OBJECTS)
