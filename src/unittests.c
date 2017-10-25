@@ -218,6 +218,31 @@ static void test_big_to_little32(void **state)
   }
 }
 
+static void test_little_to_big32(void **state)
+{
+  (void) state;
+  int8_t rv;
+  uint32_t length = 2;
+  uint32_t data[length];
+  uint32_t * src = NULL;
+  uint8_t i;
+
+  /* test for src = NULL */
+  rv = little_to_big32(src,length);
+  assert_int_equal(rv,-1);
+
+  /* create memory to test */
+  data[0] = 0x11223344;
+  data[1] = 0x55667788;
+  uint8_t seed = 0x11;
+  uint8_t * ptr = (uint8_t *)data;
+  rv = little_to_big32(data,length);
+  for(i=0;i<length*sizeof(uint32_t)/sizeof(uint8_t);i++)
+  {
+    assert_int_equal(*(ptr+i),seed*(i+1));
+  }
+}
+
 int main(void)
 {
   const struct CMUnitTest tests[] = {
@@ -225,7 +250,8 @@ int main(void)
     cmocka_unit_test(test_my_memset),
     cmocka_unit_test(test_my_memzero),
     cmocka_unit_test(test_my_reverse),
-    cmocka_unit_test(test_big_to_little32)
+    cmocka_unit_test(test_big_to_little32),
+    cmocka_unit_test(test_little_to_big32)
   };
   return cmocka_run_group_tests(tests, NULL, NULL);
 }
