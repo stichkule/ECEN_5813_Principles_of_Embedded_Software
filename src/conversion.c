@@ -101,8 +101,8 @@ int8_t big_to_little32(uint32_t * data, uint32_t length)
     /* Swap bytes of 32 bit value 1 at a time */
 		for(i = 0; i < 2; i++)
 		{
-			temp = (*temp_ptr+i);
-			*(temp_ptr+i)=(*temp_ptr+3-i);
+			temp = *(temp_ptr+i);
+			*(temp_ptr+i)=*(temp_ptr+3-i);
 			*(temp_ptr+3-i)=temp;
 		}
 		data += 1;
@@ -125,8 +125,8 @@ int8_t little_to_big32(uint32_t * data, uint32_t length)
 		/* Swap bytes of 32 bit value 1 at a time */
 		for(i = 0; i < 2; i++)
 		{
-			temp = (*temp_ptr+i);
-			*(temp_ptr+i)=(*temp_ptr+3-i);
+			temp = *(temp_ptr+i);
+			*(temp_ptr+i)=*(temp_ptr+3-i);
 			*(temp_ptr+3-i)=temp;
 		}
 		data += 1;
