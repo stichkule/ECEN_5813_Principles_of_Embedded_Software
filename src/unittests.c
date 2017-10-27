@@ -1,3 +1,23 @@
+/******************************************************************************
+ * Copyright (C) 2017 by Kyle Harlow and Shiril Tichkule - University of Colorado
+ *
+ * Redistribution, modification or use of this software in source or binary
+ * forms is permitted as long as the files maintain this copyright. Users are 
+ * permitted to modify this and use it to learn about the field of embedded
+ * software. Shiril Tichkule, Kyle Harlow, and the University of Colorado are 
+ * not liable for any misuse of this material. 
+ *
+ *****************************************************************************/
+/**
+ * @file unittests.c 
+ * @brief Cmocka unit test function definitions.
+ * This file contains Cmocka unit tests for functions defined as part of project 1 and 2. 
+ * @author Kyle Harlow
+ * @author Shiril Tichkule
+ * @date October 24, 2017
+ *
+ */
+
 #include <stdarg.h>
 #include <stdio.h>
 #include <stddef.h>
@@ -9,7 +29,7 @@
 #include "conversion.h"
 #include "circular_buffer.h"
 
-static void test_my_memmove(void **state)
+static void test_my_memmove(void **state) // my_memmove unit test
 {
   (void) state;
   uint8_t * rv;
@@ -75,7 +95,7 @@ static void test_my_memmove(void **state)
   free(mem);
 }
 
-static void test_my_memset(void **state)
+static void test_my_memset(void **state) // my_memset unit test
 {
   (void) state;
   uint8_t * rv;
@@ -105,7 +125,7 @@ static void test_my_memset(void **state)
   free(mem);
 }
 
-static void test_my_memzero(void **state)
+static void test_my_memzero(void **state) // my_memzero unit test
 {
   (void) state;
   uint8_t * rv;
@@ -128,7 +148,7 @@ static void test_my_memzero(void **state)
   free(mem);
 }
 
-static void test_my_reverse(void **state)
+static void test_my_reverse(void **state) // my_reverse unit test
 {
   (void) state;
   uint8_t * rv;
@@ -194,7 +214,7 @@ static void test_my_reverse(void **state)
   free(mem);
 }
 
-static void test_big_to_little32(void **state)
+static void test_big_to_little32(void **state) // big_to_little32 unit test
 {
   (void) state;
   int8_t rv;
@@ -213,13 +233,13 @@ static void test_big_to_little32(void **state)
   uint8_t seed = 0x11;
   uint8_t * ptr = (uint8_t *)data;
   rv = big_to_little32(data,length);
-  for(i=0;i<length*sizeof(uint32_t)/sizeof(uint8_t);i++)
+  for(i=0;i<length*sizeof(uint32_t)/sizeof(uint8_t);i++) // check order of bytes according to seed multiples
   {
     assert_int_equal(*(ptr+i),seed*(i+1));
   }
 }
 
-static void test_little_to_big32(void **state)
+static void test_little_to_big32(void **state) // little_to_big32 unit test
 {
   (void) state;
   int8_t rv;
@@ -244,7 +264,7 @@ static void test_little_to_big32(void **state)
   }
 }
 
-static void test_CB_init_destroy(void **state)
+static void test_CB_init_destroy(void **state) // unit test for circular buffer initialization
 {
   (void) state;
   CB_t * circ_buff = NULL;
@@ -265,7 +285,7 @@ static void test_CB_init_destroy(void **state)
   assert_int_equal(rv,0);
 }
 
-static void test_CB_add_remove(void **state)
+static void test_CB_add_remove(void **state) // unit test for circular buffer add/remove
 {
   (void) state;
   CB_t * circ_buff = NULL;
@@ -286,7 +306,7 @@ static void test_CB_add_remove(void **state)
   assert_int_equal(data,*(removed_data));
 }
   
-static void test_CB_empty_full_wrap(void **state)
+static void test_CB_empty_full_wrap(void **state) // unit test for empty/full/wrap around cases of circular buffer
 {
   (void) state;
   CB_t * circ_buff = NULL;
@@ -338,9 +358,9 @@ static void test_CB_empty_full_wrap(void **state)
   assert_int_equal(*(removed_data),42);
 }
 
-int main(void)
+int main(void) // main function to call unit test functions and display test results
 {
-  const struct CMUnitTest tests[] = {
+  const struct CMUnitTest tests[] = { // struct for unit test function instances
     cmocka_unit_test(test_my_memmove),
     cmocka_unit_test(test_my_memset),
     cmocka_unit_test(test_my_memzero),
@@ -351,5 +371,5 @@ int main(void)
     cmocka_unit_test(test_CB_add_remove),
     cmocka_unit_test(test_CB_empty_full_wrap)
   };
-  return cmocka_run_group_tests(tests, NULL, NULL);
+  return cmocka_run_group_tests(tests, NULL, NULL); // group test the structure containing unit tests
 }
