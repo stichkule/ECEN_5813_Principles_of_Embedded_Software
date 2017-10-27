@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (C) 2017 by Alex Fosdick - University of Colorado
+ * Copyright (C) 2017 by Kyle Harlow and Shiril Tichkule - University of Colorado
  *
  * Redistribution, modification or use of this software in source or binary
  * forms is permitted as long as the files maintain this copyright. Users are 
@@ -16,7 +16,7 @@
  * well as an enum typedef for errors associated with various operations on the
  * circular buffer. Also, contained are prototypes for functions associated
  * with the circular buffer, as listed under the Project 2 guide. The corresponding
- * function definitions are contained in the file "CircularBuffer.c".
+ * function definitions are contained in the file "circular_buffer.c".
  *
  * @author Kyle Harlow
  * @author Shiril Tichkule
