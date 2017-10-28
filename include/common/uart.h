@@ -30,8 +30,8 @@
 /** This typedef defines a data type UART_status, to represent an enum corresponding
  * to the status of the UART operation.
  * The status codes contained in the enum are:
- * UART_ERROR -- failure
- * UART_NO_ERROR -- success
+ * UART_FAILED -- failure
+ * UART_SUCCESS -- success
  */
 typedef enum
 {
