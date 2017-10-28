@@ -27,6 +27,18 @@
 #ifndef __UART_H__
 #define __UART_H__
 
+/** This typedef defines a data type UART_status, to represent an enum corresponding
+ * to the status of the UART operation.
+ * The status codes contained in the enum are:
+ * UART_ERROR -- failure
+ * UART_NO_ERROR -- success
+ */
+typedef enum
+{
+  UART_FAILED = -1,
+  UART_SUCCESS
+}UART_status;
+
 /**
  * @brief function to configure UART
  * 
@@ -34,9 +46,9 @@
  * in the writeup for project 2.
  *
  * @param none
- * @return none
+ * @return UART_status -- failed or success
  */
-void UART_configure(void);
+UART_status UART_configure(void);
 
 /**
  * @brief function to transmit single data byte through the UART
@@ -45,9 +57,9 @@ void UART_configure(void);
  * This function blocks on trasmitting data.
  *
  * @param pointer to data being transmitted
- * @return none
+ * @return UART_status -- failed or success
  */
-void UART_send(uint8_t * data);
+UART_status UART_send(uint8_t * data);
 
 /**
  * @brief function to transmit stream of data bytes through the UART
@@ -56,9 +68,9 @@ void UART_send(uint8_t * data);
  * This function blocks on trasmitting data.
  *
  * @param pointer to data being transmitted, length
- * @return none
+ * @return UART_status -- failed or success
  */
-void UART_send_n(uint8_t * data, uint16_t length);
+UART_status UART_send_n(uint8_t * data, uint16_t length);
 
 /**
  * @brief function to receive single data byte through the UART
@@ -67,9 +79,9 @@ void UART_send_n(uint8_t * data, uint16_t length);
  * This function blocks until a character has been received.
  *
  * @param pointer to data being received
- * @return none
+ * @return UART_status -- failed or success
  */
-void UART_receive(uint8_t * data);
+UART_status UART_receive(uint8_t * data);
 
 /**
  * @brief function to receive stream of data bytes through the UART
@@ -78,9 +90,9 @@ void UART_receive(uint8_t * data);
  * This function blocks until requisite number of characters have been received.
  *
  * @param pointer to data being received, length
- * @return none
+ * @return UART_status -- failed or success
  */
-void UART_receive_n(uint8_t * data, uint16_t length);
+UART_status UART_receive_n(uint8_t * data, uint16_t length);
 
 /**
  * @brief IRQ handler for the UART
