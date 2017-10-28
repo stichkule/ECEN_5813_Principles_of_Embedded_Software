@@ -39,41 +39,71 @@ UART_status UART_configure(void)
 
 UART_status UART_send(uint8_t * data)
 {
+  while(UART0->S1&UART0_S1_TDRE_MASK)
+  {
+    //NOP
+  }
+  UART->D = *data;
+  /*while(!(UART0->S1&UART0_S1_TDRE_MASK))
+  {
+    //NOP
+  }
+  if((UART0->S1&UART0_S1_TDRE_MASK))
+  {
+    return UART_SUCCESS;
+  }
+  else
+  {
+    return UART_FAILED;
+  }*/
   return UART_SUCCESS;
 }
 
 UART_status UART_send_n(uint8_t * data, uint16_t length)
 {
-  UART_status rv;
   for(uint16_t i; i<length; i++)
   {
-    rv = UART_send(data);
-    if(rv == UART_FAIL)
+    if(UART_send(data)==UART_FAILED)
     {
-      return UART_FAIL;
+       return UART_FAILED;
     }
+    /*
+    else if(UART_send(data)==UART_SUCCESS)
+    {
+      //NOP
+    }*/
   }
   return UART_SUCCESS;
 }
 
 UART_status UART_receive(uint8_t * data)
 {
+  while(!(UART0->S1&UART0_S1_RDRF_MASK))
+  {
+    //NOP
+  }
+  *data = UART->D;
+  if(UART0->S1&UART0_S1_OR_MASK){
+    UART0->S1 |= UART0_S1_OR_MASK;
+    return UART_FAILED;
+  } else {
+    return UART_SUCCESS;
+  }
   return UART_SUCCESS;
 }
 
 UART_status UART_receive_n(uint8_t * data, uint16_t length)
 { 
-   UART_status rv;
   for(uint16_t i; i<length; i++)
   {
-    rv = UART_recieve(data);
-    if(rv == UART_FAIL)
+    if(UART_receive(data)==UART_FAILED)
     {
-      return UART_FAIL;
+      return UART_FAILED;
     }
   }
   return UART_SUCCESS;
 }
 
 void UART0_IRQHandler(void){
+  
 }
