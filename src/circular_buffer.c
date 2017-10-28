@@ -131,3 +131,28 @@ CB_status CB_buffer_remove_item(CB_t * circ_buff, uint8_t* data_ptr) // function
   }
   return CB_NO_ERROR;
 }
+
+CB_status CB_peek(CB_t * circ_buff, uint16_t location, uint8_t * data_ptr)
+{
+  if(circ_buff == NULL || data_ptr == NULL || circ_buff->buf == NULL)
+  {
+    return CB_NULL_PTR;
+  }
+  if(CB_is_empty(circbuff)==CB_EMPTY)
+  {
+    return CB_EMPTY;
+  }
+  if(location > circ_buff->count)
+  {
+    return CB_NO_LENGTH;
+  }
+  else if(location >= 0 && circ_buff->head > circ_buff->tail)
+  {
+    *(data_ptr) = *(circ_buff->head-1-location);
+  }
+  else if(locaiton >= 0 && circ_buff->head < circ_buff->tail)
+  {
+    *(data_ptr) = *(circ_buff->head-1-location+circ_buff->size);
+  }
+  return CB_NO_ERROR;
+}

@@ -132,4 +132,17 @@ CB_status CB_buffer_add_item(CB_t * circ_buff, uint8_t data);
  */
 CB_status CB_buffer_remove_item(CB_t * circ_buff, uint8_t* data_ptr);
 
+/**
+ * @brief function to peak into a circular buffer
+ * 
+ * This function takes in a pointer to a circular buffer, a desired buffer 
+ * location, and a data pointer and fills the data pointer with the element
+ * at head-location in the buffer, without changing the buffer.
+ *
+ * @param pointer to circular buffer, location in circular buffer, pointer to
+ * data 
+ * @return operation status of circular buffer
+ */
+CB_status CB_peek(CB_t * circ_buff, uint16_t location, uint8_t * data_ptr);
+
 #endif /* __CIRCULAR_BUFFER_H__ */
