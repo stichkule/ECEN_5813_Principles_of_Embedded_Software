@@ -15,7 +15,7 @@ UART_status UART_configure(void)
   /* Disable Transmit and Recieve during configuration */
   UART0->C2 &= ~(UART0_C2_TE_MASK & UART0_C2_RE_MASK);
 
-  /* Set high and low bits of the SBR (Baud rate clock divider */
+  /* Set high and low bits of the SBR (Baud rate clock divider) */
   UART0->BDH |= UART0_BDH_SBR(BAUD_RATE_DIV_H);
   UART0->BDL |= UART0_BDL_SBR(BAUD_RATE_DIV_L);
 
@@ -25,13 +25,13 @@ UART_status UART_configure(void)
   /* Set 8 Bit Transmit and No Parity Bit */
   UART0->C1 &= ~(UART0_C1_M_MASK & UART0_PE_MASK);
 
-  /* Set the oversampling ration */
+  /* Set the oversampling ratio */
   UART0->C4 |= (UART0_C4_OSR(OSR));
   
-  /* Re-enable transmit and recieve */
+  /* Re-enable transmit and receive */
   UART0->C2 |= (UART0_C2_TE_MASK & UART0_C2_RE_MASK);
   
-  /* Enable transmit and recieve interupts */
+  /* Enable transmit and receive interupts */
   UART0->C2 |= (UART0_C2_TIE_MASK & UART0_C2_RIE_MASK);
 
   return UART_SUCCESS
