@@ -1,8 +1,11 @@
 #include "core_cm0plus.h"
-#include "core_m4_simd.h"
+#include "core_cm4_simd.h"
 #include "core_cmInstr.h"
 #include "core_cm4.h"
 #include "core_cmFunc.h"
+#include "MKL25Z4.h"
+#include "system_MKL25Z4.h"
+
 #include <stdint.h>
 #include "circular_buffer.h"
 #include "uart.h"
@@ -10,7 +13,7 @@
 
 #define PRIORITY 1
 
-extern volatile CB_t* circ_buff;
+extern CB_t* circ_buff;
 
 uint32_t project2(void)
 {
@@ -37,11 +40,11 @@ uint32_t project2(void)
   
 
   uint16_t str_length = 13;
-  uint8_t string[str_length] = {"Hello World!"};
+  uint8_t string[] = {"Hello World!"};
   for(uint16_t i = 0; i<length; i++){
     rv = CB_buffer_add_item(circ_buff, *(string+i));
   }
   rv2 = UART_send_n(string, str_length);
-
-  return 0;
+  if(rv2) return UART_FAILED;
+  else return UART_SUCCESS;
 }

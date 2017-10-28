@@ -1,7 +1,8 @@
 #include <stdint.h>
-#include "system_MLK25Z4.h"
+#include "system_MKL25Z4.h"
 #include "MKL25Z4.h"
 #include "circular_buffer.h"
+#include "uart.h"
 
 #define BAUD_RATE 115200
 #define OSR 0x0F
