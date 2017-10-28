@@ -1,6 +1,7 @@
 #include <stdint.h>
-#include <system_MLK25Z4.h>
-#include <MKL25Z4.h>
+#include "system_MLK25Z4.h"
+#include "MKL25Z4.h"
+#include "circular_buffer.h"
 
 #define BAUD_RATE 115200
 #define OSR 0x0F
@@ -9,6 +10,7 @@
 #define BAUD_RATE_DIV_H ((BAUD_RATE_DIV>>UART0_BDL_SBR_WIDTH)&UART0_BDH_SBR_MASK)
 #define BAUD_RATE_DIV_L ((BAUD_RATE_DIV&UART0_BDL_SBR_MASK))
 
+extern uint8_t * data;
 
 UART_status UART_configure(void)
 {
@@ -39,31 +41,25 @@ UART_status UART_configure(void)
 
 UART_status UART_send(uint8_t * data)
 {
-  while(UART0->S1&UART0_S1_TDRE_MASK)
+  CB_status rv;
+  while(!(UART0->S1&UART0_S1_TDRE_MASK))
   {
     //NOP
   }
-  UART->D = *data;
-  /*while(!(UART0->S1&UART0_S1_TDRE_MASK))
-  {
-    //NOP
-  }
-  if((UART0->S1&UART0_S1_TDRE_MASK))
-  {
-    return UART_SUCCESS;
-  }
-  else
+  rv = CB_buffer_remove_item(circ_buff, data);
+  if(rv)
   {
     return UART_FAILED;
-  }*/
+  }
+  UART->D = *data;
   return UART_SUCCESS;
 }
 
 UART_status UART_send_n(uint8_t * data, uint16_t length)
 {
-  for(uint16_t i; i<length; i++)
+  for(uint16_t i=0; i<length; i++)
   {
-    if(UART_send(data)==UART_FAILED)
+    if(UART_send(data+i)==UART_FAILED)
     {
        return UART_FAILED;
     }
@@ -78,16 +74,16 @@ UART_status UART_send_n(uint8_t * data, uint16_t length)
 
 UART_status UART_receive(uint8_t * data)
 {
+  CB_status rv;
   while(!(UART0->S1&UART0_S1_RDRF_MASK))
   {
     //NOP
   }
   *data = UART->D;
-  if(UART0->S1&UART0_S1_OR_MASK){
-    UART0->S1 |= UART0_S1_OR_MASK;
+  rv = CB_buffer_add_item(circ_buff, data);
+  if(rv)
+  {
     return UART_FAILED;
-  } else {
-    return UART_SUCCESS;
   }
   return UART_SUCCESS;
 }
@@ -105,5 +101,12 @@ UART_status UART_receive_n(uint8_t * data, uint16_t length)
 }
 
 void UART0_IRQHandler(void){
-  
+  if(UART0->S1 & UART0_S1_TDRE_MASK)
+  {
+     UART_send(data);
+  }
+  if(UART0->S1 & UART0_S1_RDRF_MASK)
+  {    
+    UART_receive(data);
+  }
 }
