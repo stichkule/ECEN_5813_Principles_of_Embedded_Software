@@ -28,7 +28,9 @@ SRCS =	main.c		\
 	memory.c	\
 	conversion.c	\
 	debug.c\
-	CircularBuffer.c
+	circular_buffer.c\
+	uart.c\
+	project2.c
 
 ifeq ($(PLATFORM),KL25Z)
 SRCS = main.c		\
@@ -36,6 +38,8 @@ SRCS = main.c		\
 	memory.c	\
 	conversion.c	\
 	debug.c\
-	CircularBuffer.c\
-	system_MKL25Z4.c
+	circular_buffer.c\
+	system_MKL25Z4.c\
+	uart.c\
+	project2.c
 endif

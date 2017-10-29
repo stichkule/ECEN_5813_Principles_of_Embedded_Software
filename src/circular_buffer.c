@@ -138,7 +138,7 @@ CB_status CB_peek(CB_t * circ_buff, uint16_t location, uint8_t * data_ptr)
   {
     return CB_NULL_PTR;
   }
-  if(CB_is_empty(circbuff)==CB_EMPTY)
+  if(CB_is_empty(circ_buff)==CB_EMPTY)
   {
     return CB_EMPTY;
   }
@@ -150,7 +150,7 @@ CB_status CB_peek(CB_t * circ_buff, uint16_t location, uint8_t * data_ptr)
   {
     *(data_ptr) = *(circ_buff->head-1-location);
   }
-  else if(locaiton >= 0 && circ_buff->head < circ_buff->tail)
+  else if(location >= 0 && circ_buff->head < circ_buff->tail)
   {
     *(data_ptr) = *(circ_buff->head-1-location+circ_buff->size);
   }

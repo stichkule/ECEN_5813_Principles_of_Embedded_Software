@@ -88,4 +88,4 @@ size.txt: project1.elf
 #clean target rule
 .PHONY: clean
 clean:
-	rm -rf *.o *.i *.asm *.s *.map *.dep *.elf size.txt
+	rm -rf *.o *.i *.asm *.map *.dep *.elf size.txt
