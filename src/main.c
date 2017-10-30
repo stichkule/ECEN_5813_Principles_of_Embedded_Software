@@ -28,5 +28,9 @@ int main(void)
   #ifdef PROJECT1
     project1();
   #endif
+  /* Calls a compile time switch for project2 */
+  #ifdef PROJECT2
+    project2();
+  #endif
   return 0;
 }

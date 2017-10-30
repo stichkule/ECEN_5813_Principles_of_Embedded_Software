@@ -1,0 +1,5 @@
+<map id="I2C Peripheral Access Layer" name="I2C Peripheral Access Layer">
+<area shape="rect" id="node1" href="$group__I2C__Register__Masks.html" title="I2C Register Masks" alt="" coords="439,5,578,32"/>
+<area shape="rect" id="node2" href="$group__Peripheral__access__layer.html" title="Device Peripheral Access\l Layer" alt="" coords="5,27,179,69"/>
+<area shape="rect" id="node4" href="$group__I2C__Register__Accessor__Macros.html" title="I2C &#45; Register accessor\l macros" alt="" coords="428,57,589,98"/>
+</map>
