@@ -1,3 +1,24 @@
+/******************************************************************************
+ * Copyright (C) 2017 by Kyle Harlow and Shiril Tichkule - University of Colorado
+ *
+ * Redistribution, modification or use of this software in source or binary
+ * forms is permitted as long as the files maintain this copyright. Users are 
+ * permitted to modify this and use it to learn about the field of embedded
+ * software. Shiril Tichkule, Kyle Harlow, and the University of Colorado are 
+ * not liable for any misuse of this material. 
+ *
+ *****************************************************************************/
+/**
+ * @file project2.c 
+ * @brief UART functionality for project 2.
+ * This file calls functions from uart.c and implements interrupts for data transfer
+ * over the UART.
+ * @author Kyle Harlow
+ * @author Shiril Tichkule
+ * @date October 29, 2017
+ *
+ */
+
 #include <stdint.h>
 #include <math.h>
 #include "system_MKL25Z4.h"
@@ -23,6 +44,18 @@ uint8_t * data_tx = &temp_tx;
 uint8_t rx_rv_IRQ = 0;
 uint8_t tx_rv_IRQ = 0;
 
+
+/**
+ * @brief function to calculate character counts
+ * 
+ * This function takes in a pointer to a integer, classifies it in one of four categories --
+ * Miscellaneous, Punctuations, Alphabets, and Numbers, and updates the corresponding 
+ * category count.
+ *
+ * @param pointer to integer, pointer to counter array
+ * @return none
+ */
+
 void calc_statistics(int32_t * ptr, uint8_t * data_ptr) //function to calculate character count statistics
 {
 	if(*data_ptr <= 32 || *data_ptr == 127) *(ptr+0) += 1; // Miscellaneous
@@ -31,6 +64,15 @@ void calc_statistics(int32_t * ptr, uint8_t * data_ptr) //function to calculate 
 	if(*data_ptr >= 48 && *data_ptr <= 57) *(ptr+2) += 1; // Numbers
 	if((*data_ptr >= 65 && *data_ptr <= 90) || (*data_ptr >= 97 && *data_ptr <= 122)) *(ptr+3) += 1; // Alphabets
 }
+
+/**
+ * @brief function to dump character count statistics
+ * 
+ * This function displays character count statistics on a terminal
+ *
+ * @param none
+ * @return UART_status type
+ */
 
 UART_status dump_statistics(void) //function to dump statistics to terminal
 {
