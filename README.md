@@ -1,5 +1,9 @@
 # ECEN_5813_Harlow_Tichkule
 
+## WARNING
+
+Do not call make clean. Project2.elf derived from KDS will be deleted. If you call make clean return to ```project_2_rel``` tag.  
+
 ## MAKEFILE
 
 In order to build the project call the following commands:
