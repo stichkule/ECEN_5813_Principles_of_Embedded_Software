@@ -63,7 +63,7 @@ DEP = $(SRCS:.c=.dep)
 #compile modules for unit tests
 .PHONY: unittests
 unittests: unittests.elf
-unittests.elf: unittests.c conversion.c memory.c CircularBuffer.c
+unittests.elf: unittests.c conversion.c memory.c circular_buffer.c
 	$(CC) $(INCLUDES) $^ -lcmocka -lm -o $@
 
 #compile_all target rule
