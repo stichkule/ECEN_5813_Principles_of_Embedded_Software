@@ -29,6 +29,7 @@
 #include "project2.h"
 #include "circular_buffer.h"
 #include "uart.h"
+#include "led.h"
 
 /* Clock and Baud calculation macros */
 #define BAUD_RATE 38400
@@ -104,6 +105,7 @@ UART_status UART_send(uint8_t * data_tx)
     //NOP
   }
   UART0->D = *data_tx; // write buffer data to UART tx register
+  GPIOB->PTOR |= (1<<18);
   return UART_SUCCESS;
 }
 
@@ -146,6 +148,7 @@ UART_status UART_receive(uint8_t * data_rx)
     //NOP
   }
   *data_rx = UART0->D; // put UART data into buffer
+  GPIOB->PTOR |= (1<<19);
   return UART_SUCCESS;
 }
 
@@ -180,8 +183,7 @@ UART_status UART_receive_n(uint8_t * data_rx, uint16_t length)
  * @param none
  * @return none
  */
-#ifdef INTERRUPTS
-void UART0_IRQHandler(void) // IRQ handler for UART0
+/*void UART0_IRQHandler(void) // IRQ handler for UART0
 {
   if(UART0->S1 & UART0_S1_RDRF_MASK) // if data to be received present in UART register
   {
@@ -191,5 +193,5 @@ void UART0_IRQHandler(void) // IRQ handler for UART0
   {
      tx_rv_IRQ = UART_send(data_tx); 
   }
-}
-#endif
+}*/
+
