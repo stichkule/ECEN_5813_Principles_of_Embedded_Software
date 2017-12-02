@@ -82,7 +82,7 @@ UART_status UART_configure(void)
   UART0->C2 |= (UART0_C2_TE_MASK | UART0_C2_RE_MASK);
   
   /* Enable receive interrupt */
-  UART0->C2 |= (UART0_C2_RIE_MASK);
+  //UART0->C2 |= (UART0_C2_RIE_MASK);
 
   return UART_SUCCESS;
 }
@@ -99,19 +99,9 @@ UART_status UART_configure(void)
 
 UART_status UART_send(uint8_t * data_tx)
 {
-  CB_status rv3=0;
   while(!(UART0->S1&UART0_S1_TC_MASK)) //while transmit not complete
   {
     //NOP
-  }
-  rv3 = CB_buffer_remove_item(tx_buffer, data_tx);
-
-  if(rv3) // if buffer empty, disable tx interrupt
-  {
-    /* Disable transmit interrupt */
-	UART0->C2 &= ~(UART0_C2_TCIE_MASK);
-
-    return UART_FAILED;
   }
   UART0->D = *data_tx; // write buffer data to UART tx register
   return UART_SUCCESS;
@@ -151,17 +141,11 @@ UART_status UART_send_n(uint8_t * data_tx, uint16_t length)
 
 UART_status UART_receive(uint8_t * data_rx)
 {
-  CB_status rv;
   while(!(UART0->S1&UART0_S1_RDRF_MASK)) // while receive buffer not full
   {
     //NOP
   }
   *data_rx = UART0->D; // put UART data into buffer
-  rv = CB_buffer_add_item(rx_buffer, *data_rx);
-  if(rv)
-  {
-    return UART_FAILED;
-  }
   return UART_SUCCESS;
 }
 
@@ -196,15 +180,16 @@ UART_status UART_receive_n(uint8_t * data_rx, uint16_t length)
  * @param none
  * @return none
  */
-
+#ifdef INTERRUPTS
 void UART0_IRQHandler(void) // IRQ handler for UART0
 {
   if(UART0->S1 & UART0_S1_RDRF_MASK) // if data to be received present in UART register
-	{
-	  rx_rv_IRQ = UART_receive(data_rx);
-	}
+  {
+    rx_rv_IRQ = UART_receive(data_rx);
+  }
   if(UART0->S1 & UART0_S1_TC_MASK) // if data to transmit present in UART register
   {
      tx_rv_IRQ = UART_send(data_tx); 
   }
 }
+#endif
