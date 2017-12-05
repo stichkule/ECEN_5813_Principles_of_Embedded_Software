@@ -17,20 +17,20 @@
 
 void project3(void);
 
-int8_t test_move1(uint8_t * src, uint8_t * dst);
+void test_move1(uint8_t * src, uint8_t * dst);
 
-int8_t test_move2(uint8_t * src, uint8_t * dst);
+void test_move2(uint8_t * src, uint8_t * dst);
 
-int8_t test_move3(uint8_t * src, uint8_t * dst);
+void test_move3(uint8_t * src, uint8_t * dst);
 
-int8_t test_move4(uint8_t * src, uint8_t * dst);
+void test_move4(uint8_t * src, uint8_t * dst);
 
-int8_t test_zero1(uint8_t * src);
+void test_zero1(uint8_t * src);
 
-int8_t test_zero2(uint8_t * src);
+void test_zero2(uint8_t * src);
 
-int8_t test_zero3(uint8_t * src);
+void test_zero3(uint8_t * src);
 
-int8_t test_zero4(uint8_t * src);
+void test_zero4(uint8_t * src);
 
 #endif /* __PROJECT3_H__ */

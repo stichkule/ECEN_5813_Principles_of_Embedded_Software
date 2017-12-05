@@ -16,7 +16,7 @@ CFLAGS = -Wall	\
 	 -O0	\
 	 -std=c99
 CC = gcc
-PFLAG = -DPROJECT1
+PFLAG = -DPROJECT3
 VFLAG = -DVERBOSE
 
 ifeq ($(PLATFORM),HOST)
@@ -79,10 +79,10 @@ dependencies: $(DEP)
 
 #built target rule
 .PHONY: build
-build: project1.elf $(DEP) size.txt
-project1.elf: $(OBJECTS) $(SRCS)
-	$(CC) -o $@ $(OBJECTS) $(CFLAGS) -Wl,-Map=project1.map $(INCLUDES) -lm $(LDFLAGS) $(ARCH) $(CPPFLAGS)
-size.txt: project1.elf
+build: project3.elf $(DEP) size.txt
+project3.elf: $(OBJECTS) $(SRCS)
+	$(CC) -o $@ $(OBJECTS) $(CFLAGS) -Wl,-Map=project3.map $(INCLUDES) -lm $(LDFLAGS) $(ARCH) $(CPPFLAGS)
+size.txt: project3.elf
 	size --format=SysV $< > size.txt 
 
 #clean target rule

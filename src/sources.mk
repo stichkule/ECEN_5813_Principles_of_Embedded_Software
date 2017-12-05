@@ -6,7 +6,7 @@
 # software. Shiril Tichkule, Kyle Harlow, and the University of Colorado are
 # not liable for any misuse of this material.
 
-# Includes and Sources for Project 1
+# Includes and Sources for Project 3
 INCLUDES = -I ../include/common
 
 ifeq ($(PLATFORM),HOST)
@@ -24,13 +24,9 @@ INCLUDES = \
 	-I ../include/CMSIS
 endif
 SRCS =	main.c		\
-	project1.c	\
 	memory.c	\
 	conversion.c	\
-	debug.c\
-	circular_buffer.c\
-	uart.c\
-	project2.c
+	project3.c
 
 ifeq ($(PLATFORM),KL25Z)
 SRCS = main.c		\

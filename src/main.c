@@ -20,7 +20,8 @@
 
 #include <stdint.h>
 #include "project1.h"
-#include "debug.h"
+#include "project2.h"
+#include "project3.h"
 
 int main(void)
 {
@@ -31,6 +32,10 @@ int main(void)
   /* Calls a compile time switch for project2 */
   #ifdef PROJECT2
     project2();
+  #endif
+  /* Calls a compile time switch for project3 */
+  #ifdef PROJECT3
+    project3();
   #endif
   return 0;
 }
