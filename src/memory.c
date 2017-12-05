@@ -14,21 +14,23 @@
  * This file edits memory by moving, copying, setting, allocating and freeing. 
  * @author Kyle Harlow
  * @author Shiril Tichkule
- * @date September 29, 2017
+ * @date November 25, 2017
  *
  */
-
+#include "MKL25Z4.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include "memory.h"
+#include "dma.h"
+#include "project3.h"
 
 uint8_t* my_memmove(uint8_t* src, uint8_t* dst, size_t length)
 {
   if (src == NULL || dst == NULL){ return NULL; }
   int32_t distance = dst - src; // get distance of destination from source
   int32_t i;
-  if (distance == 0) // if destination and source addresses overlap excatly, no need to move data
+  if (distance == 0) // if destination and source addresses overlap exactly, no need to move data
     return src;
   else if (distance > 0 && distance < length) // if distance is positive, but less than length, we have overlap
   {
@@ -52,11 +54,26 @@ uint8_t* my_memmove(uint8_t* src, uint8_t* dst, size_t length)
   return dst;
 }
 
+uint8_t* my_memmove_dma(uint8_t* src, uint8_t* dst, size_t length, uint8_t transfer_size)
+{
+	uint8_t rv_DMA_IRQ = 0;
+	DMA_status rv_dma = DMA_configure_memmove(src,dst,length,transfer_size);
+	if (rv_dma == -1)
+	{
+		return NULL;
+	}
+	DMA_DCR0 |= DMA_DCR_START_MASK; // start DMA transfer
+	//while (rv_DMA_IRQ == 0) {}; // wait while DMA transfer ongoing
+	// DMA transfer has terminated
+	return dst; // return destination pointer
+	rv_DMA_IRQ = 0; // clear global DMA_IRQ variable
+}
+
 uint8_t* my_memcpy(uint8_t* src, uint8_t* dst, size_t length)
 {
   if (src == NULL || dst == NULL){ return NULL; }
   int32_t i;
-  if (src == dst) // if destination and source addresses overlap excatly, no need to copy data
+  if (src == dst) // if destination and source addresses overlap exactly, no need to copy data
     return src;
   else if (dst > src) // if destination occurs after source in memory
   {
@@ -95,6 +112,21 @@ uint8_t* my_memzero(uint8_t* src, size_t length)
       *(src+i) = 0;
     }
   return src;
+}
+
+uint8_t* my_memzero_dma(uint8_t* src_zero, uint8_t* dst, size_t length, uint8_t transfer_size)
+{
+	uint8_t rv_DMA_IRQ = 0;
+	DMA_status rv_dma = DMA_configure_memzero(src_zero,dst,length,transfer_size);
+	if (rv_dma == -1)
+	{
+		return NULL;
+	}
+	DMA_DCR0 |= DMA_DCR_START_MASK; // start DMA transfer
+	//while (rv_DMA_IRQ==0) {}; // wait while DMA transfer ongoing
+	// DMA transfer has terminated
+	return dst; // return destination pointer
+	rv_DMA_IRQ = 0; // clear global DMA_IRQ variable
 }
 
 uint8_t* my_reverse(uint8_t* src, size_t length)
