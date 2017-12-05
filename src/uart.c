@@ -49,7 +49,7 @@
  * @return UART_status -- failed or success
  */
 
-UART_status UART_configure(void)
+void UART_configure(void)
 {
   /* Set clock source */
   SIM->SOPT2 |= SIM_SOPT2_UART0SRC(0x1);
@@ -83,9 +83,7 @@ UART_status UART_configure(void)
   UART0->C2 |= (UART0_C2_TE_MASK | UART0_C2_RE_MASK);
   
   /* Enable receive interrupt */
-  //UART0->C2 |= (UART0_C2_RIE_MASK);
-
-  return UART_SUCCESS;
+  UART0->C2 |= (UART0_C2_RIE_MASK);
 }
 
 /**
@@ -183,15 +181,31 @@ UART_status UART_receive_n(uint8_t * data_rx, uint16_t length)
  * @param none
  * @return none
  */
-/*void UART0_IRQHandler(void) // IRQ handler for UART0
+void UART0_IRQHandler(void)
 {
-  if(UART0->S1 & UART0_S1_RDRF_MASK) // if data to be received present in UART register
-  {
-    rx_rv_IRQ = UART_receive(data_rx);
-  }
-  if(UART0->S1 & UART0_S1_TC_MASK) // if data to transmit present in UART register
-  {
-     tx_rv_IRQ = UART_send(data_tx); 
-  }
-}*/
+
+	if((UART0->S1 & UART0_S1_RDRF_MASK)&&CB_is_full(rx_buffer)!=CB_FULL) // if data to be received present in UART register
+	{
+		GPIOB->PTOR |= (1<<19);
+		rx_rv_IRQ = UART_receive(temp_rx_ptr);
+		rx_rv_IRQ = CB_buffer_add_item(rx_buffer, *temp_rx_ptr);
+		if(CB_is_full(rx_buffer)==CB_FULL){
+			UART0_C2 &= ~UART_C2_RIE_MASK;
+			rx_rv_IRQ = CB_FULL;
+		}
+	}
+	/* If tx data reg is empty and tx buffer has data send data */
+	if((UART0->S1 & UART0_S1_TDRE_MASK)&&(CB_is_empty(tx_buffer)!=CB_EMPTY))
+	{
+		GPIOB->PTOR |= (1<<18);
+		tx_rv_IRQ = CB_buffer_remove_item(tx_buffer, temp_tx_ptr);
+		tx_rv_IRQ = UART_send(temp_tx_ptr);
+		/* Disable tx interrupts if there is no more data *
+		 * This prevents being stuck in TX interrupt */
+		if(CB_is_empty(tx_buffer)==CB_EMPTY)
+		{
+			UART0_C2 &= ~UART_C2_TIE_MASK;
+		}
+	}
+}
 

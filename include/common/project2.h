@@ -31,9 +31,9 @@
 #include "uart.h"
 
 extern uint8_t temp_rx;
-extern uint8_t * data_rx;
+extern uint8_t * temp_rx_ptr;
 extern uint8_t temp_tx;
-extern uint8_t * data_tx;
+extern uint8_t * temp_tx_ptr;
 extern CB_t * rx_buffer;
 extern CB_t * tx_buffer;
 extern uint8_t rx_rv_IRQ;
