@@ -109,3 +109,24 @@ Uart defines an error checking ```enum UART_status``` as well as the following m
 4. UART_receive
 5. UART_receive_n
 6. UART0_IRQHandler
+
+### BBB Timing
+
+| Test           | Size (bytes) | stdlib.h vs. memory.h | Time1 (us) | Time2 (us) | Time3 (us) | Time4 (us) | Time5 (us) | TimeAvg (us) |
+|----------------|--------------|-----------------------|------------|------------|------------|------------|------------|--------------|
+| Memmove        | 10           | stdlib.h              | 41         | 41         | 41         | 39         | 40         | 40.4         |
+|                |              | memory.h              | 8          | 7          | 7          | 7          | 7          | 7.2          |
+|                | 100          | stdlib.h              | 6          | 6          | 6          | 6          | 6          | 6            |
+|                |              | memory.h              | 11         | 109        | 12         | 10         | 112        | 50.8         |
+|                | 1000         | stdlib.h              | 9          | 9          | 9          | 9          | 10         | 9.2          |
+|                |              | memory.h              | 167        | 68         | 68         | 172        | 68         | 108.6        |
+|                | 5000         | stdlib.h              | 26         | 25         | 28         | 128        | 126        | 66.6         |
+|                |              | memory.h              | 272        | 276        | 277        | 438        | 373        | 327.2        |
+| Memset/Memzero | 10           | stdlib.h              | 4          | 3          | 5          | 4          | 4          | 4            |
+|                |              | memory.h              | 5          | 5          | 4          | 5          | 5          | 4.8          |
+|                | 100          | stdlib.h              | 33         | 101        | 35         | 35         | 35         | 47.8         |
+|                |              | memory.h              | 8          | 9          | 8          | 9          | 8          | 8.4          |
+|                | 1000         | stdlib.h              | 5          | 5          | 5          | 5          | 6          | 5.2          |
+|                |              | memory.h              | 217        | 50         | 50         | 50         | 51         | 83.6         |
+|                | 5000         | stdlib.h              | 107        | 9          | 9          | 10         | 9          | 28.8         |
+|                |              | memory.h              | 237        | 237        | 238        | 237        | 237        | 237.2        |
