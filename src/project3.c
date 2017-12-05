@@ -204,6 +204,7 @@ void project3(void){
   {
     test_mem[i] = i;
   }
+  test_move1(ptra, ptrb);
   test_move2(ptra, ptrb);
   test_move3(ptra, ptrb);
   test_move4(ptra, ptrb);
