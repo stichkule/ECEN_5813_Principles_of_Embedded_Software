@@ -13,7 +13,7 @@ include sources.mk
 CFLAGS = -Wall	\
 	 -Werror\
 	 -g	\
-	 -O0	\
+	 -O3	\
 	 -std=c99
 CC = gcc
 PFLAG = -DPROJECT3
