@@ -40,6 +40,19 @@
 uint8_t* my_memmove(uint8_t* src, uint8_t* dst, size_t length);
 
 /**
+ * @brief function to move data from source location to destination using DMA
+ *
+ * This function takes in source and destination pointers, along with a length
+ * parameter, to move data from the source to the destination. It should be
+ * able to handle cases where source and destination memory areas overlap, and
+ * also copy data without any corruption. It makes use of the DMA controller.
+ *
+ * @param source pointer, destination pointer, length, transfer size
+ * @return pointer to destination
+ */
+uint8_t* my_memmove_dma(uint8_t* src, uint8_t* dst, size_t length, uint8_t transfer_size);
+
+/**
  * @brief function to copy data from source location to destination
  * 
  * This function takes in source and destination pointers, along with a length 
@@ -73,6 +86,17 @@ uint8_t* my_memset(uint8_t* src, size_t length, uint8_t value);
  * @return pointer to the source
  */
 uint8_t* my_memzero(uint8_t* src, size_t length);
+
+/**
+ * @brief function to set memory locations to zero using DMA
+ *
+ * This function takes in a source pointer, a length parameter, and
+ * sets corresponding memory locations to zero. It makes use of the DMA controller.
+ *
+ * @param source pointer, length, transfer size
+ * @return pointer to the source
+ */
+uint8_t* my_memzero_dma(uint8_t* src_zero, uint8_t* dst, size_t length, uint8_t transfer_size);
 
 /**
  * @brief function to reverse order of bytes in memory
