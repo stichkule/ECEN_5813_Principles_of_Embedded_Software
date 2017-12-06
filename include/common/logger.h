@@ -62,4 +62,10 @@ typedef struct prof_payload{
   time_t profile_time;
 }prof_t;
 
+void print_log_item(log_t * log_ptr, uint8_t log_id, uint8_t profile_id);
+
+void log_item(log_t * log_ptr, uint8_t log_id);
+
+void populate_log_item(log_t * log_ptr, uint8_t log_id, uint8_t profile_id);
+
 #endif /*__LOGGER_H_*/
