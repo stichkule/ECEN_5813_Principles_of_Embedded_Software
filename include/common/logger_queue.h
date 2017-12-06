@@ -80,7 +80,7 @@ LQ_status LQ_init(logger_q * log_queue, size_t length);
  * @param pointer to log queue
  * @return operation status of log queue
  */
-LQ_status CB_destroy(logger_q* log_queue);
+LQ_status LQ_destroy(logger_q* log_queue);
 
 /**
  * @brief function to check if log queue is full
@@ -91,7 +91,7 @@ LQ_status CB_destroy(logger_q* log_queue);
  * @param pointer to log queue
  * @return operation status of log queue
  */
-LQ_status CB_is_full(logger_q * log_queue);
+LQ_status LQ_is_full(logger_q * log_queue);
 
 /**
  * @brief function to check if log queue is empty
@@ -102,7 +102,7 @@ LQ_status CB_is_full(logger_q * log_queue);
  * @param pointer to log queue
  * @return operation status of log queue
  */
-LQ_status CB_is_empty(logger_q * log_queue);
+LQ_status LQ_is_empty(logger_q * log_queue);
 
 /**
  * @brief function to add item to log queue
@@ -113,7 +113,7 @@ LQ_status CB_is_empty(logger_q * log_queue);
  * @param pointer to log queue, ptr to data item (log struct) to be added
  * @return operation status of log queue
  */
-LQ_status CB_buffer_add_item(logger_q * log_queue, log_t * log_struct);
+LQ_status LQ_buffer_add_item(logger_q * log_queue, log_t * log_struct);
 
 /**
  * @brief function to remove item from log queue
@@ -125,7 +125,7 @@ LQ_status CB_buffer_add_item(logger_q * log_queue, log_t * log_struct);
  * @param pointer to log queue, pointer to data (log struct) removed
  * @return operation status of log queue
  */
-LQ_status CB_buffer_remove_item(logger_q * log_queue, log_t * log_struct);
+LQ_status LQ_buffer_remove_item(logger_q * log_queue, log_t * log_struct);
 
 /**
  * @brief function to peak into a log queue
@@ -138,6 +138,6 @@ LQ_status CB_buffer_remove_item(logger_q * log_queue, log_t * log_struct);
  * data (log struct)
  * @return operation status of log queue
  */
-LQ_status CB_peek(logger_q * log_queue, int16_t location, log_t * log_struct);
+LQ_status LQ_peek(logger_q * log_queue, int16_t location, log_t * log_struct);
 
 #endif /* __LOGGER_QUEUE_H__ */
