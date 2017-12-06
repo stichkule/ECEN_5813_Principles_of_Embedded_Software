@@ -19,6 +19,7 @@ typedef enum log_id{
   ERROR;
   PROFILING_STARTED;
   PROFILING_RESULT;
+  PROFILING_COMPLETED;
   DATA_RECEIVED;
   DATA_ANALYSIS_STARTED;
   DATA_ALPHA_COUNT;
@@ -58,13 +59,13 @@ typedef enum profiler_id{
 }prof_id_t;
 
 typedef struct prof_payload{
-  uint8_t profiler_id;
   time_t profile_time;
+  uint8_t profiler_id;
 }prof_t;
 
 void print_log_item(log_t * log_ptr, uint8_t log_id, uint8_t profile_id);
 
-void log_item(log_t * log_ptr, uint8_t log_id);
+void log_item(log_t * log_ptr, log_q * log_queue);
 
 void populate_log_item(log_t * log_ptr, uint8_t log_id, uint8_t profile_id);
 
