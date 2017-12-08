@@ -26,6 +26,8 @@
 #ifndef __MEMORY_H__
 #define __MEMORY_H__
 
+#include <stddef.h>
+
 /**
  * @brief function to move data from source location to destination
  * 

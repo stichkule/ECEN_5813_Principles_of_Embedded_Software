@@ -1,6 +1,6 @@
 #include <stdint.h>
 #include <stdlib.h>
-//#include "circular_buffer.h"
+#include "logger_queue.h"
 #include "dma.h"
 
 /*
@@ -12,9 +12,12 @@ extern CB_t * rx_buffer;
 extern CB_t * tx_buffer;
 */
 extern uint8_t rv_DMA_IRQ;
+extern log_q * logger_queue;
+extern log_t * log_ptr_1;
+extern log_t * log_ptr_2;
+extern prof_t * prof_ptr;
+extern uint32_t start_count;
+extern uint32_t end_count;
+extern uint32_t count_diff;
 //extern uint8_t tx_rv_IRQ;
 
-/*
-void calc_statistics(int32_t * ptr, uint8_t * data_ptr);
-UART_status dump_statistics(void);
-*/

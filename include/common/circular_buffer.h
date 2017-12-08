@@ -74,7 +74,7 @@ typedef enum
  * @param pointer to circular buffer, length
  * @return operation status of circular buffer
  */
-CB_status CB_init(CB_t * circ_buff, uint16_t length);
+CB_status CB_init(CB_t * circ_buff, int16_t length);
 
 /**
  * @brief function to destroy circular buffer
@@ -143,6 +143,6 @@ CB_status CB_buffer_remove_item(CB_t * circ_buff, uint8_t* data_ptr);
  * data 
  * @return operation status of circular buffer
  */
-CB_status CB_peek(CB_t * circ_buff, uint16_t location, uint8_t * data_ptr);
+CB_status CB_peek(CB_t * circ_buff, int16_t location, uint8_t * data_ptr);
 
 #endif /* __CIRCULAR_BUFFER_H__ */

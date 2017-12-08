@@ -16,12 +16,14 @@
  * @author Kyle Harlow
  * @author Shiril Tichkule
  *
- * @date October 22, 2017
+ * @date December 05, 2017
  *
  */
 
 #ifndef __LOGGER_QUEUE_H__
 #define __LOGGER_QUEUE_H__
+
+#include "logger.h"
 
 /** This typedef defines a data type logger_q, to represent a struct corresponding to
  * the logger queue. The elements of the struct are:
@@ -139,5 +141,25 @@ LQ_status LQ_buffer_remove_item(log_q * log_queue, log_t * log_struct);
  * @return operation status of log queue
  */
 LQ_status LQ_peek(log_q * log_queue, int16_t location, log_t * log_struct);
+
+/**
+ * @brief function to block until empty
+ *
+ * This function blocks until the current logger buffer is empty.
+ *
+ * @param pointer to log queue
+ * @return none
+ */
+void LQ_flush (log_q * log_queue);
+
+/**
+ * @brief function to log a log item
+ *
+ * This function logs a log item into the logger queue.
+ *
+ * @param log pointer, logger queue pointer
+ * @return none
+ */
+void log_item(log_t * log_ptr, log_q * log_queue);
 
 #endif /* __LOGGER_QUEUE_H__ */
