@@ -1,4 +1,24 @@
-#include <stdint.h>
+/******************************************************************************
+ * Copyright (C) 2017 by Kyle Harlow and Shiril Tichkule - University of Colorado
+ *
+ * Redistribution, modification or use of this software in source or binary
+ * forms is permitted as long as the files maintain this copyright. Users are
+ * permitted to modify this and use it to learn about the field of embedded
+ * software. Shiril Tichkule, Kyle Harlow, and the University of Colorado are
+ * not liable for any misuse of this material.
+ *
+ *****************************************************************************/
+/**
+ * @file dma.c
+ * @brief DMA function definitions for project 3.
+ * This file implements functions to configure the DMA module to work with memmove and memzero.
+ * @author Kyle Harlow
+ * @author Shiril Tichkule
+ * @date December 04, 2017
+ *
+ */
+
+ #include <stdint.h>
 
 #define CLOCK_SETUP (0)
 

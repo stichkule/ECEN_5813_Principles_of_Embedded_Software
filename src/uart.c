@@ -2,18 +2,18 @@
  * Copyright (C) 2017 by Kyle Harlow and Shiril Tichkule - University of Colorado
  *
  * Redistribution, modification or use of this software in source or binary
- * forms is permitted as long as the files maintain this copyright. Users are 
+ * forms is permitted as long as the files maintain this copyright. Users are
  * permitted to modify this and use it to learn about the field of embedded
- * software. Shiril Tichkule, Kyle Harlow, and the University of Colorado are 
- * not liable for any misuse of this material. 
+ * software. Shiril Tichkule, Kyle Harlow, and the University of Colorado are
+ * not liable for any misuse of this material.
  *
  *****************************************************************************/
 /**
- * @file uart.c 
+ * @file uart.c
  * @brief UART setup and functions for project 2.
  * This file is used to setup and configure UART0 on the FRDM-KL25Z. It also
  * implements send and receive functions that are called by the UART0_IRQHandler.
- * 
+ *
  * @author Kyle Harlow
  * @author Shiril Tichkule
  * @date October 29, 2017
@@ -29,6 +29,10 @@
 #include "project2.h"
 #include "circular_buffer.h"
 #include "uart.h"
+#include "led.h"
+#include "project3.h"
+#include "logger.h"
+#include "logger_queue.h"
 
 /* Clock and Baud calculation macros */
 #define BAUD_RATE 38400
@@ -40,7 +44,7 @@
 
 /**
  * @brief function to configure UART
- * 
+ *
  * This function configures the UART on the FRDM-KL25Z according to settings provided
  * in the writeup for project 2.
  *
@@ -48,7 +52,7 @@
  * @return UART_status -- failed or success
  */
 
-UART_status UART_configure(void)
+void UART_configure(void)
 {
   /* Set clock source */
   SIM->SOPT2 |= SIM_SOPT2_UART0SRC(0x1);
@@ -83,14 +87,12 @@ UART_status UART_configure(void)
   
   /* Enable receive interrupt */
   UART0->C2 |= (UART0_C2_RIE_MASK);
-
-  return UART_SUCCESS;
 }
 
 /**
  * @brief function to transmit single data byte through the UART
- * 
- * This function sends a single byte of data through the UART. 
+ *
+ * This function sends a single byte of data through the UART.
  * This function blocks on trasmitting data.
  *
  * @param pointer to data being transmitted
@@ -99,28 +101,19 @@ UART_status UART_configure(void)
 
 UART_status UART_send(uint8_t * data_tx)
 {
-  CB_status rv3=0;
   while(!(UART0->S1&UART0_S1_TC_MASK)) //while transmit not complete
   {
     //NOP
   }
-  rv3 = CB_buffer_remove_item(tx_buffer, data_tx);
-
-  if(rv3) // if buffer empty, disable tx interrupt
-  {
-    /* Disable transmit interrupt */
-	UART0->C2 &= ~(UART0_C2_TCIE_MASK);
-
-    return UART_FAILED;
-  }
   UART0->D = *data_tx; // write buffer data to UART tx register
+  //GPIOB->PTOR |= (1<<18);
   return UART_SUCCESS;
 }
 
 /**
  * @brief function to transmit stream of data bytes through the UART
- * 
- * This function sends multiple bytes of data through the UART. 
+ *
+ * This function sends multiple bytes of data through the UART.
  * This function blocks on trasmitting data.
  *
  * @param pointer to data being transmitted, length
@@ -141,8 +134,8 @@ UART_status UART_send_n(uint8_t * data_tx, uint16_t length)
 
 /**
  * @brief function to receive single data byte through the UART
- * 
- * This function receives a single byte of data through the UART. 
+ *
+ * This function receives a single byte of data through the UART.
  * This function blocks until a character has been received.
  *
  * @param pointer to data being received
@@ -151,24 +144,19 @@ UART_status UART_send_n(uint8_t * data_tx, uint16_t length)
 
 UART_status UART_receive(uint8_t * data_rx)
 {
-  CB_status rv;
   while(!(UART0->S1&UART0_S1_RDRF_MASK)) // while receive buffer not full
   {
     //NOP
   }
   *data_rx = UART0->D; // put UART data into buffer
-  rv = CB_buffer_add_item(rx_buffer, *data_rx);
-  if(rv)
-  {
-    return UART_FAILED;
-  }
+  //GPIOB->PTOR |= (1<<19);
   return UART_SUCCESS;
 }
 
 /**
  * @brief function to receive stream of data bytes through the UART
- * 
- * This function receives multiple bytes of data through the UART. 
+ *
+ * This function receives multiple bytes of data through the UART.
  * This function blocks until requisite number of characters have been received.
  *
  * @param pointer to data being received, length
@@ -189,22 +177,42 @@ UART_status UART_receive_n(uint8_t * data_rx, uint16_t length)
 
 /**
  * @brief IRQ handler for the UART
- * 
- * This function handles transmit and receive interrupts for the UART. 
+ *
+ * This function handles transmit and receive interrupts for the UART.
  * It clears the interrupt flag (if set) for either transmit or receive interrupts.
  *
  * @param none
  * @return none
  */
-
-void UART0_IRQHandler(void) // IRQ handler for UART0
+void UART0_IRQHandler(void)
 {
-  if(UART0->S1 & UART0_S1_RDRF_MASK) // if data to be received present in UART register
+	__disable_irq();
+	if(CB_is_empty(tx_buffer)){UART0_C2 &= ~UART_C2_TIE_MASK;}
+	if((UART0->S1 & UART0_S1_RDRF_MASK)&&CB_is_full(rx_buffer)!=CB_FULL) // if data to be received present in UART register
 	{
-	  rx_rv_IRQ = UART_receive(data_rx);
+		//GPIOB->PTOR |= (1<<19);
+		rx_rv_IRQ = UART_receive(temp_rx_ptr);
+		rx_rv_IRQ = CB_buffer_add_item(rx_buffer, *temp_rx_ptr);
+		populate_log_item(log_ptr_1, DATA_RECEIVED, 0, temp_rx_ptr, 1);
+		log_item(log_ptr_1, logger_queue);
+		//print_log_item(log_ptr_1);
+		if(CB_is_full(rx_buffer)==CB_FULL){
+			UART0_C2 &= ~UART_C2_RIE_MASK;
+			rx_rv_IRQ = CB_FULL;
+		}
 	}
-  if(UART0->S1 & UART0_S1_TC_MASK) // if data to transmit present in UART register
-  {
-     tx_rv_IRQ = UART_send(data_tx); 
-  }
+	/* If tx data reg is empty and tx buffer has data send data */
+	if((UART0->S1 & UART0_S1_TDRE_MASK)&&(CB_is_empty(tx_buffer)!=CB_EMPTY))
+	{
+		//GPIOB->PTOR |= (1<<18);
+		tx_rv_IRQ = CB_buffer_remove_item(tx_buffer, temp_tx_ptr);
+		tx_rv_IRQ = UART_send(temp_tx_ptr);
+		/* Disable tx interrupts if there is no more data *
+		 * This prevents being stuck in TX interrupt */
+		if(CB_is_empty(tx_buffer)==CB_EMPTY)
+		{
+			UART0_C2 &= ~UART_C2_TIE_MASK;
+		}
+	}
+	__enable_irq();
 }

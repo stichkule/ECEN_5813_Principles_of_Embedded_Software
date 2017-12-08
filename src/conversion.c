@@ -31,6 +31,12 @@ uint8_t my_itoa(int32_t data, uint8_t * ptr, uint32_t base)
   uint8_t mod;
   uint8_t sign = 0;
 
+  if(data==0)
+  {
+	  *ptr = 48;
+	  return 1;
+  }
+
   /* Check if data is less than 0 to set sign */
   if(data < 0)
   {

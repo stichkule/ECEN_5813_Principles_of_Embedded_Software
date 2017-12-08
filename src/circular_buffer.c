@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include "circular_buffer.h"
 
-CB_status CB_init(CB_t * circ_buff, uint16_t length) // function to initialize circular buffer
+CB_status CB_init(CB_t * circ_buff, int16_t length) // function to initialize circular buffer
 {
   if(circ_buff == NULL) // null pointer check
   {
@@ -132,7 +132,7 @@ CB_status CB_buffer_remove_item(CB_t * circ_buff, uint8_t* data_ptr) // function
   return CB_NO_ERROR;
 }
 
-CB_status CB_peek(CB_t * circ_buff, uint16_t location, uint8_t * data_ptr)
+CB_status CB_peek(CB_t * circ_buff, int16_t location, uint8_t * data_ptr)
 {
   if(circ_buff == NULL || data_ptr == NULL || circ_buff->buf == NULL)
   {
