@@ -26,6 +26,7 @@
 #include "project3.h"
 #include "string.h"
 #include "uart.h"
+#include "project2.h"
 
 void log_data (uint8_t * ptr, size_t length)
 {
@@ -124,7 +125,9 @@ void populate_log_item(log_t * log_ptr, uint8_t log_id, uint8_t profile_id, void
       log_ptr->log_id = log_id;
       log_ptr->timestamp = RTC_TSR;
       log_ptr->log_length = length;
-      log_ptr->payload = (uint8_t *) payload_info;
+      CB_status cb;
+      cb = CB_peek(rx_buffer,0,temp_tx_ptr);
+      log_ptr->payload = (uint8_t *) temp_tx_ptr;
       log_ptr->checksum = (uint32_t)log_id+(uint32_t)log_ptr->timestamp+(uint32_t)log_ptr->log_length+(uint32_t)log_ptr->payload;
       break;
     case DATA_ALPHA_COUNT :
@@ -267,7 +270,7 @@ void rtc_init(uint32_t epoch)
     RTC_IER |= RTC_IER_TSIE_MASK; //Seconds interrupt enable
 
     /*Enable RTC seconds irq*/
-    //NVIC_EnableIRQ(21);
+    NVIC_EnableIRQ(21);
 
     /*Write to the TSR to clear SR[TOF] and SR[TIF] flags*/
     RTC_TSR = epoch;
@@ -281,7 +284,7 @@ void RTC_Seconds_IRQHandler(void)
 	__disable_irq();
 	GPIOB->PTOR |= (1<<19);
 	populate_log_item(log_ptr_1, HEARTBEAT, 0, NULL, 0);
-	log_item(log_ptr_1, logger_queue);
+	//log_item(log_ptr_1, logger_queue);
 	print_log_item(log_ptr_1);
 	__enable_irq();
     //Log heartbeat

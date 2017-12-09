@@ -66,28 +66,9 @@ LQ_status LQ_destroy(log_q* log_queue) // function to destroy circular buffer
   return LQ_NO_ERROR;
 }
 
-__STATIC_INLINE LQ_status LQ_is_full(log_q * log_queue) // function to check whether circular buffer is full
-{
-  if(log_queue == NULL) // null pointer check
-  {
-    return LQ_NULL_PTR;
-  }
-  if(log_queue->size == log_queue->count)
-  {
-    return LQ_FULL;
-  }
-  else
-  {
-    return LQ_NO_ERROR;
-  }
-}
 
-__STATIC_INLINE LQ_status LQ_is_empty(log_q * log_queue) // function to check whether circular buffer is empty
-{
-  if(log_queue==NULL||log_queue->buf==NULL) return LQ_NULL_PTR; // null pointer check
-  if(log_queue->count == 0) return LQ_EMPTY;
-  else return LQ_NO_ERROR;
-}
+
+
 
 LQ_status LQ_buffer_add_item(log_q * log_queue, log_t * log_struct) // function to add item to circular buffer
 {
@@ -99,7 +80,7 @@ LQ_status LQ_buffer_add_item(log_q * log_queue, log_t * log_struct) // function 
   {
     return LQ_FULL;
   }
-  (log_queue->head) = (log_struct); // else add data to buffer
+  *(log_queue->head) = *(log_struct); // else add data to buffer
   log_queue->count++;
   if(log_queue->head+1 == log_queue->buf+log_queue->size) // wrap around
   {
@@ -122,7 +103,7 @@ LQ_status LQ_buffer_remove_item(log_q * log_queue, log_t * log_struct) // functi
   {
     return LQ_EMPTY;
   }
-  log_struct = (log_queue->tail); // else remove data
+  *log_struct = *(log_queue->tail); // else remove data
   log_queue->count--;
   if(log_queue->tail+1 == log_queue->buf+log_queue->size) // wrap around
   {

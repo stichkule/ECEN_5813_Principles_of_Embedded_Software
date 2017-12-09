@@ -20,30 +20,45 @@
 
 #include "MKL25Z4.h"
 #include "spi.h"
+#include "core_cm0plus.h"
+#include "nrf24.h"
 
 
 void SPI_init(void)
 {
-	SPI0_C1 = SPI_C1_MSTR_MASK | SPI_C1_SPE_MASK; // Check CPOL CPHA
-	// Check BUS_CLK, pre-scaler, BR divisor
-	SPI_BR_REG(SPI0) = 0x03;
+	SPI0_C1 = 0x50;
+	//SPI0_C1 |= SPI_C1_MSTR_MASK;
+	//SPI0_C1 |= SPI_C1_SPE_MASK;
+	SPI0_C2 |= SPI_C2_MODFEN_MASK;
+	// Clear CPOL and CPHA
+	//SPI0_C1 &= (SPI_C1_CPOL_MASK);
+	//SPI0_C1 &= ~(SPI_C1_CPHA_MASK);
+	// pre-scaler of 1, BR divisor of 2
+	SPI_BR_REG(SPI0) = 0x00;
 }
 
-void SPI_read_byte(uint8_t byte)
+uint8_t SPI_read_byte(void)
 {
-	while(WAIT_SPRF); // Wait until data received in SPI RX buffer
+	uint8_t byte;
+	while(!(SPI0_S & SPI_S_SPRF_MASK)); // Wait until data received in SPI RX buffer
+	//SPI0_D = NOP;
+	//SPI_flush();
 	byte = SPI0_D;
+	return byte;
 }
 
-void SPI_write_byte(uint8_t byte)
+uint8_t SPI_write_byte(uint8_t byte)
 {
-	SPI_flush();
+	while(!(SPI0_S & SPI_S_SPTEF_MASK));
 	SPI0_D = byte;
+	uint8_t rv = SPI0_D;
+	return rv;
+	//SPI_flush();
 }
 
 void SPI_send_packet(uint8_t * p, size_t length)
 {
-	SPI_flush();
+	//SPI_flush();
 	while(length>0)
 	{
 		SPI_flush();
@@ -55,5 +70,5 @@ void SPI_send_packet(uint8_t * p, size_t length)
 
 void SPI_flush(void)
 {
-	while(WAIT_SPTEF){}; // Block until SPI TX buffer completes transmitting
+	while(WAIT_SPRF){}; // Block until SPI TX buffer completes transmitting
 }

@@ -21,6 +21,9 @@
 
 #include "MKL25Z4.h"
 #include "gpio.h"
+#include "nrf24.h"
+#include "spi.h"
+#include "nordic.h"
 
 void GPIO_nrf_init(void)
 {
@@ -31,5 +34,9 @@ void GPIO_nrf_init(void)
     PORTD->PCR[1] |= PORT_PCR_MUX(2); // SCK
     PORTD->PCR[2] |= PORT_PCR_MUX(2); // MOSI
     PORTD->PCR[3] |= PORT_PCR_MUX(2); // MISO
-    PTD_BASE_PTR->PDDR |= 1<<0; // Set data direction to output
+    GPIOD->PDDR |= 1<<0; // Set data direction to output
+
+    SPI_init();
+
+    //nrf_write_register(CONFIG, 0x7A); // Power up and configure NRF module
 }

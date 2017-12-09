@@ -54,6 +54,8 @@ uint8_t* my_memmove(uint8_t* src, uint8_t* dst, size_t length)
   return dst;
 }
 
+#pragma GCC push
+#pragma GCC optimize ("O3")
 uint8_t* my_memmove_dma(uint8_t* src, uint8_t* dst, size_t length, uint8_t transfer_size)
 {
 	uint8_t rv_DMA_IRQ = 0;
@@ -68,6 +70,7 @@ uint8_t* my_memmove_dma(uint8_t* src, uint8_t* dst, size_t length, uint8_t trans
 	return dst; // return destination pointer
 	rv_DMA_IRQ = 0; // clear global DMA_IRQ variable
 }
+#pragma GCC pop
 
 uint8_t* my_memcpy(uint8_t* src, uint8_t* dst, size_t length)
 {
@@ -114,6 +117,8 @@ uint8_t* my_memzero(uint8_t* src, size_t length)
   return src;
 }
 
+#pragma GCC push
+#pragma GCC optimize ("O3")
 uint8_t* my_memzero_dma(uint8_t* src_zero, uint8_t* dst, size_t length, uint8_t transfer_size)
 {
 	uint8_t rv_DMA_IRQ = 0;
@@ -128,6 +133,7 @@ uint8_t* my_memzero_dma(uint8_t* src_zero, uint8_t* dst, size_t length, uint8_t 
 	return dst; // return destination pointer
 	rv_DMA_IRQ = 0; // clear global DMA_IRQ variable
 }
+#pragma GCC pop
 
 uint8_t* my_reverse(uint8_t* src, size_t length)
 {

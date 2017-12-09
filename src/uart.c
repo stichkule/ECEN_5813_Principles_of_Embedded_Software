@@ -26,6 +26,7 @@
 
 #include "system_MKL25Z4.h"
 #include "MKL25Z4.h"
+#include "core_cm0plus.h"
 #include "project2.h"
 #include "circular_buffer.h"
 #include "uart.h"
@@ -194,8 +195,8 @@ void UART0_IRQHandler(void)
 		//GPIOB->PTOR |= (1<<19);
 		rx_rv_IRQ = UART_receive(temp_rx_ptr);
 		rx_rv_IRQ = CB_buffer_add_item(rx_buffer, *temp_rx_ptr);
-		populate_log_item(log_ptr_1, DATA_RECEIVED, 0, temp_rx_ptr, 1);
-		log_item(log_ptr_1, logger_queue);
+		//populate_log_item(log_ptr_1, DATA_RECEIVED, 0, temp_rx_ptr, 1);
+		//log_item(log_ptr_1, logger_queue);
 		//print_log_item(log_ptr_1);
 		if(CB_is_full(rx_buffer)==CB_FULL){
 			UART0_C2 &= ~UART_C2_RIE_MASK;

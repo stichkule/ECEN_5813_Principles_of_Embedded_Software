@@ -1,7 +1,6 @@
-//DMA STUFF
-
-/*#include <stdint.h>
+#include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
 #include "system_MKL25Z4.h"
 #include "MKL25Z4.h"
 #include "core_cm0plus.h"
@@ -12,12 +11,32 @@
 #include "uart.h"
 #include "logger.h"
 #include "led.h"
+#include "nrf24.h"
+#include "spi.h"
+#include "nordic.h"
+#include "gpio.h"
+#include "project2.h"
+#include "project3.h"
+#include "logger_queue.h"
+#include "circular_buffer.h"
 
-#pragma 03
+// Define Global Variables
+CB_t * rx_buffer = NULL;
+CB_t * tx_buffer = NULL;
+uint8_t temp_rx = 0;
+uint8_t * temp_rx_ptr = &temp_rx;
+uint8_t temp_tx = 0;
+uint8_t * temp_tx_ptr = &temp_tx;
+uint8_t rx_rv_IRQ = 0;
+uint8_t tx_rv_IRQ = 0;
+log_q * logger_queue = NULL;
+log_t * log_ptr_1 = NULL;
+log_t * log_ptr_2 = NULL;
+prof_t * prof_ptr = NULL;
 
-uint32_t start_count; // count variables for start and end times
-uint32_t end_count;
-uint32_t count_diff;
+uint32_t start_count = 0;
+uint32_t end_count = 0;
+uint32_t count_diff = 0;
 
 #define getcount() (SysTick->VAL) // get current value of systick counter
 #define systick_overflow (SysTick->CTRL&SysTick_CTRL_COUNTFLAG_Msk) // check counter overflow
@@ -30,13 +49,6 @@ void SysTick_Init(uint32_t ticks)
     SysTick->VAL   = 0UL;
 }
 
-void port_configure() // LED port to test interrupt
-{
-	SIM->SCGC5 |= SIM_SCGC5_PORTB_MASK; //Clock Port B
-	PORTB->PCR[18] = PORT_PCR_MUX(1); //Alternative GPIO function for red LED pin
-	PTB->PDDR = 1 << 18; //Set as output pin
-}
-
 void DMA0_IRQHandler(void)
 {
 	end_count=getcount(); // get count at ISR entry
@@ -46,9 +58,6 @@ void DMA0_IRQHandler(void)
 	// set return value of DMA IRQ to indicate memory transfer/set is complete
 	DMA_DSR_BCR0 |= DMA_DSR_BCR_DONE_MASK;
 	uint8_t rv_DMA_IRQ = 1;
-	PTB->PTOR = 1 << 18; //Toggle PTB18 (red LED)
-	//GPIOD->PCOR |= (1<<0); // Clear the pin and write 1 to the ISF flag to clear interrupt
-	//PORTD->PCR[0] |=PORT_PCR_ISF_MASK;
 	// enable interrupts again
 	__enable_irq();
 }
@@ -58,9 +67,9 @@ int main(void)
   port_configure();
   UART_configure();
   DMA_status rv_DMA;
-  size_t transfer_length = 10;
-  uint8_t transfer_size = 0; // (0,1,2):(4 bytes, 1 byte, 2 byte)
-  uint16_t data_length = 10;
+  size_t transfer_length = 5000;
+  uint8_t transfer_size = 1; // (0,1,2):(4 bytes, 1 byte, 2 byte)
+  uint16_t data_length = 5000;
 
   uint8_t * src = malloc(data_length*sizeof(uint8_t));
   uint8_t * dst = malloc(transfer_length*sizeof(uint8_t));
@@ -87,7 +96,7 @@ int main(void)
   // Enable interrupts at GLOBAL
   __enable_irq();
 
-  /*
+
   SysTick_Init(0xFFFFFF); // Load maximum count in systick counter
   start_count=getcount(); // count value before DMA transfer initiated
 
@@ -150,264 +159,13 @@ int main(void)
     LOG_RAW_STRING("Clock cycles for memzero -- MY -- 10 byte -- 1 byte blocks");
     LOG_RAW_INT(count_diff);
 
-    systickzero(); // reset counter for next timing operation
-
-
-  // Blocking Logger Test
-    /*
-	uint8_t * src = malloc(8*sizeof(uint8_t));
-	for(uint8_t i=0;i<8;i++)
-	  {
-		  *(src+i) = (uint8_t)i;
-	  }
-	uint32_t integer = 98;
-	uint8_t str[12] = "Hello World";
-	UART_configure();
-	LED_configure();
-
-	LOG_RAW_DATA(src,8);
-	LOG_RAW_STRING(str);
-	LOG_RAW_INT(integer);
-
-	free(src);
-
-	while(1){}
-  return 0;
-}*/
-
-// UART STUFF
-/*
-#include "MKL25Z4.h"
-#include "uart.h"
-#include "memory.h"
-#include "conversion.h"
-#include "led.h"
-#include "project2.h"
-#include <stdlib.h>
-#include <stdint.h>
-
-// Define Global Variables
-CB_t * rx_buffer = NULL;
-CB_t * tx_buffer = NULL;
-uint8_t temp_rx = 0;
-uint8_t * temp_rx_ptr = &temp_rx;
-uint8_t temp_tx = 0;
-uint8_t * temp_tx_ptr = &temp_tx;
-uint8_t rx_rv_IRQ = 0;
-uint8_t tx_rv_IRQ = 0;
-
-int main(void)
-{
-	// Run hardware configurations
-	UART_configure();
-	LED_configure();
-
-	// Initialize variables
-	UART_status rv_tx, rv_rx;
-	uint8_t string[] = "Hello World";
-	int8_t k = 0;
-	uint8_t * tx_ptr = string;
-	uint8_t rx_data[1];
-	uint8_t * rx_ptr = rx_data;
-	int8_t length_temp = 12;
-
-	while(k != length_temp)
-	{
-		rv_tx = UART_send((string+k));
-	    k++;
-	}
-
-	CB_status rv;
-	uint16_t buffer_length = 32;
-
-	// Initialize global pointers
-	temp_tx_ptr = &temp_tx;
-	temp_rx_ptr = &temp_rx;
-
-	// Initialize RX Circular buffer
-	rx_buffer = malloc(sizeof(CB_t));
-	rv = CB_init(rx_buffer, buffer_length);
-	if(rv)
-	{
-		rv = CB_destroy(rx_buffer);
-		uint8_t rx_init_fail[] = "RX Buffer Init Failed\n";
-		length_temp = 23;
-		k = 0;
-		while(k != length_temp)
-		{
-			rv_tx = UART_send((rx_init_fail+k));
-		    k++;
-		}
-		return rv;
-	}
-
-	// Initialize TX Circular buffer
-	tx_buffer = malloc(sizeof(CB_t));
-	rv = CB_init(tx_buffer, buffer_length);
-	if(rv)
-	{
-		rv = CB_destroy(tx_buffer);
-		uint8_t tx_init_fail[] = "TX Buffer Init Failed\n";
-		length_temp = 23;
-		k = 0;
-		while(k != length_temp)
-		{
-			rv_tx = UART_send((tx_init_fail+k));
-			k++;
-		}
-		return rv;
-	}
-
-	// Enable interrupts and set priority at NVIC
-	NVIC_EnableIRQ(UART0_IRQn);
-	//NVIC_SetPriority(UART0_IRQn, PRIORITY);
-
-	// Enable global interrupts
-	__enable_irq();
-
-
-	for (;;)
-	{
-		/*Code based on polling
-		 * while(k != length){
-		 * rv_tx = UART_send((string+k));
-		 * k++;
-		 * }
-		 * while(1){
-		 * rv_rx = UART_receive(rx_ptr);
-		 * rv_tx = UART_send(rx_ptr);
-		 * }
-		 */
-		/*if(rx_rv_IRQ==CB_FULL)
-		{
-			while((CB_is_empty(rx_buffer)) != CB_EMPTY)
-			{
-				rv = CB_buffer_remove_item(rx_buffer, rx_ptr);
-			}
-			rx_rv_IRQ = 0;
-			//rv_tx = dump_statistics();
-			length_temp = 14;
-			k=0;
-			uint8_t tx_flag[]="32 Chars Sent";
-			while(k != length_temp)
-			{
-				rv = CB_buffer_add_item(tx_buffer, *(tx_flag+k));
-				k++;
-			}
-			// Re-enable RX interrupts
-			UART0_C2 |= UART_C2_RIE_MASK;
-			// Enable TX interrupts
-			UART0_C2 |= UART_C2_TIE_MASK;
-		}
-	}
-    return 0;
-}*/
-
-//RTC stuff
-
-/*
-#include "MKL25Z4.h"
-#include "uart.h"
-#include "memory.h"
-#include "conversion.h"
-#include "led.h"
-#include "project2.h"
-#include "logger.h"
-#include <stdlib.h>
-#include <stdint.h>
-
-// Define Global Variables
-CB_t * rx_buffer = NULL;
-CB_t * tx_buffer = NULL;
-uint8_t temp_rx = 0;
-uint8_t * temp_rx_ptr = &temp_rx;
-uint8_t temp_tx = 0;
-uint8_t * temp_tx_ptr = &temp_tx;
-uint8_t rx_rv_IRQ = 0;
-uint8_t tx_rv_IRQ = 0;
-
-int main(void)
-{
-	LED_configure();
-	uint32_t current_epoch = 1512626382;
-	rtc_configure();
-	rtc_init(current_epoch);
-	for(uint32_t i=0;i<19999999;i++)
-	{
-
-	}
-	uint32_t curr_time = RTC_TSR;
-	return 0;
-}
-*/
-
 //LOGGER stuff
 
-#include "MKL25Z4.h"
-#include "uart.h"
-#include "memory.h"
-#include "conversion.h"
-#include "led.h"
-#include "project2.h"
-#include "project3.h"
-#include "logger.h"
-#include "logger_queue.h"
-#include "circular_buffer.h"
-#include <stdlib.h>
-#include <stdint.h>
-#include <string.h>
-
-// Define Global Variables
-CB_t * rx_buffer = NULL;
-CB_t * tx_buffer = NULL;
-uint8_t temp_rx = 0;
-uint8_t * temp_rx_ptr = &temp_rx;
-uint8_t temp_tx = 0;
-uint8_t * temp_tx_ptr = &temp_tx;
-uint8_t rx_rv_IRQ = 0;
-uint8_t tx_rv_IRQ = 0;
-log_q * logger_queue = NULL;
-log_t * log_ptr_1 = NULL;
-log_t * log_ptr_2 = NULL;
-prof_t * prof_ptr = NULL;
-
-uint32_t start_count = 0;
-uint32_t end_count = 0;
-uint32_t count_diff = 0;
-
-#define getcount() (SysTick->VAL) // get current value of systick counter
-#define systick_overflow (SysTick->CTRL&SysTick_CTRL_COUNTFLAG_Msk) // check counter overflow
-#define systickzero() (SysTick->VAL= 0UL) // reset counter
-
-void SysTick_Init(uint32_t ticks)
-{
-    SysTick->LOAD  = (uint32_t)(ticks - 1UL); // counter reload value
-    SysTick->CTRL  = SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_ENABLE_Msk; // enable counter
-    SysTick->VAL   = 0UL;
-}
-
-void DMA0_IRQHandler(void)
-{
-	end_count=getcount(); // get count at ISR entry
-    // interrupt generated upon DMA transfer completion.
-	// disable interrupts
-	__disable_irq();
-	// set return value of DMA IRQ to indicate memory transfer/set is complete
-	DMA_DSR_BCR0 |= DMA_DSR_BCR_DONE_MASK;
-	uint8_t rv_DMA_IRQ = 1;
-	// enable interrupts again
-	__enable_irq();
-}
-
-int main(void)
-{
 	// Enable interrupts and set priority at NVIC
 	NVIC_EnableIRQ(UART0_IRQn);
 
 	// Enable DMA0 interrupt
     NVIC->ISER[0]=0x00000001;
-	// Enable interrupts at GLOBAL
-	__enable_irq();
 
 	CB_status rv;
 	uint16_t buffer_length = 32;
@@ -430,7 +188,6 @@ int main(void)
 	LQ_status rv_LQ = LQ_init(logger_queue,2);
 
 	// Run hardware configurations
-	UART_configure();
 	LED_configure();
 
 	uint32_t current_epoch = 1512626382;
@@ -579,7 +336,6 @@ int main(void)
        	free(dst);
        	free(src_zero);
     }
-	//uint8_t print = 1;
 
 	for (;;)
 	{
@@ -598,3 +354,67 @@ int main(void)
 	}
     return 0;
 }
+
+// SPI stuff
+/*
+#include "MKL25Z4.h"
+#include "nrf24.h"
+#include "spi.h"
+#include "nordic.h"
+#include "gpio.h"
+#include <stdint.h>
+#include "uart.h"
+#include "project2.h"
+#include "project3.h"
+#include "logger.h"
+#include "logger_queue.h"
+#include "circular_buffer.h"
+
+// Define Global Variables
+CB_t * rx_buffer = NULL;
+CB_t * tx_buffer = NULL;
+uint8_t temp_rx = 0;
+uint8_t * temp_rx_ptr = &temp_rx;
+uint8_t temp_tx = 0;
+uint8_t * temp_tx_ptr = &temp_tx;
+uint8_t rx_rv_IRQ = 0;
+uint8_t tx_rv_IRQ = 0;
+log_q * logger_queue = NULL;
+log_t * log_ptr_1 = NULL;
+log_t * log_ptr_2 = NULL;
+prof_t * prof_ptr = NULL;
+
+uint32_t start_count = 0;
+uint32_t end_count = 0;
+uint32_t count_diff = 0;
+
+int main(void)
+{
+	uint8_t rv_status,rv_config,rv_tx_addr[5],rv_rf_setup,rv_rf_ch,rv_fifo_status,send_tx_addr[5];
+	GPIO_nrf_init();
+
+	// Write registers and read values from NRF module
+
+	nrf_write_register(CONFIG, 0x02); // Power up and configure NRF module
+	rv_config = nrf_read_register(CONFIG);
+	rv_status = nrf_read_status();
+	for(uint8_t i=0;i<4;i++)
+		{
+			*(send_tx_addr+i) = 0xB3+i;
+		}
+	*(send_tx_addr+4) = 0x0F;
+
+	nrf_write_tx_addr(send_tx_addr);
+
+	nrf_read_tx_addr(rv_tx_addr);
+
+	nrf_write_rf_setup(0x00);
+	rv_rf_setup = nrf_read_rf_setup();
+
+	nrf_write_rf_ch(0x04);
+	rv_rf_ch = nrf_read_rf_ch();
+
+	rv_fifo_status = nrf_read_fifo_status();
+
+	return 0;
+}*/
