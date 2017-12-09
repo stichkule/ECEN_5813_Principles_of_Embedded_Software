@@ -28,6 +28,8 @@
 #ifndef __CIRCULAR_BUFFER_H__
 #define __CIRCULAR_BUFFER_H__
 
+#include <project3.h>
+#include "core_cm0plus.h"
 /** This typedef defines a data type CB_t, to represent a struct corresponding to
  * the circular buffer. The elements of the struct are:
  * buf -- pointer to uint8_t data contained within the buffer
@@ -96,7 +98,7 @@ CB_status CB_destroy(CB_t* circ_buff);
  * @param pointer to circular buffer
  * @return operation status of circular buffer
  */
-CB_status CB_is_full(CB_t * circ_buff);
+__STATIC_INLINE CB_status CB_is_full(CB_t * circ_buff);
 
 /**
  * @brief function to check if circular buffer is empty
@@ -107,7 +109,7 @@ CB_status CB_is_full(CB_t * circ_buff);
  * @param pointer to circular buffer
  * @return operation status of circular buffer
  */
-CB_status CB_is_empty(CB_t * circ_buff);
+__STATIC_INLINE CB_status CB_is_empty(CB_t * circ_buff);
 
 /**
  * @brief function to add item to circular buffer

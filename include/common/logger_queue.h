@@ -24,6 +24,9 @@
 #define __LOGGER_QUEUE_H__
 
 #include "logger.h"
+#include "project3.h"
+#include "core_cm0plus.h"
+
 
 /** This typedef defines a data type logger_q, to represent a struct corresponding to
  * the logger queue. The elements of the struct are:
@@ -93,7 +96,7 @@ LQ_status LQ_destroy(log_q* log_queue);
  * @param pointer to log queue
  * @return operation status of log queue
  */
-LQ_status LQ_is_full(log_q * log_queue);
+__STATIC_INLINE LQ_status LQ_is_full(log_q * log_queue);
 
 /**
  * @brief function to check if log queue is empty
@@ -104,7 +107,7 @@ LQ_status LQ_is_full(log_q * log_queue);
  * @param pointer to log queue
  * @return operation status of log queue
  */
-LQ_status LQ_is_empty(log_q * log_queue);
+__STATIC_INLINE LQ_status LQ_is_empty(log_q * log_queue);
 
 /**
  * @brief function to add item to log queue
