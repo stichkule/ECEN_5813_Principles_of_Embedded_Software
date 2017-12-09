@@ -35,7 +35,7 @@ LQ_status LQ_init(log_q * log_queue, size_t length) // function to initialize ci
   {
     return LQ_NO_LENGTH;
   }
-  log_queue->buf = malloc(length*sizeof(log_queue->buf)); // allocate memory for circular buffer
+  log_queue->buf = malloc(length*sizeof(log_t)); // allocate memory for circular buffer
   if(log_queue->buf == NULL)
   {
     return LQ_BUFFER_ALLOCATION_FAILURE;
@@ -98,11 +98,11 @@ LQ_status LQ_buffer_add_item(log_q * log_queue, log_t * log_struct) // function 
   {
     return LQ_FULL;
   }
-  *(log_queue->head) = *(log_struct); // else add data to buffer
+  (log_queue->head) = (log_struct); // else add data to buffer
   log_queue->count++;
   if(log_queue->head+1 == log_queue->buf+log_queue->size) // wrap around
   {
-    *log_queue->head = *log_queue->buf;
+    log_queue->head = log_queue->buf;
   }
   else
   {
@@ -121,11 +121,11 @@ LQ_status LQ_buffer_remove_item(log_q * log_queue, log_t * log_struct) // functi
   {
     return LQ_EMPTY;
   }
-  *log_struct = *(log_queue->tail); // else remove data
+  log_struct = (log_queue->tail); // else remove data
   log_queue->count--;
   if(log_queue->tail+1 == log_queue->buf+log_queue->size) // wrap around
   {
-    *log_queue->tail = *log_queue->buf;
+    log_queue->tail = log_queue->buf;
   }
   else
   {
@@ -150,11 +150,11 @@ LQ_status LQ_peek(log_q * log_queue, int16_t location, log_t * log_struct)
   }
   else if(location >= 0 && log_queue->head > log_queue->tail)
   {
-    *log_struct = *(log_queue->head-1-location);
+    log_struct = (log_queue->head-1-location);
   }
   else if(location >= 0 && log_queue->head < log_queue->tail)
   {
-    *log_struct = *(log_queue->head-1-location+log_queue->size);
+    log_struct = (log_queue->head-1-location+log_queue->size);
   }
   return LQ_NO_ERROR;
 }
