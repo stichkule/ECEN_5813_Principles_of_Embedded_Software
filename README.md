@@ -176,4 +176,6 @@ The BBB was faster than the KL25Z in almost all cases due to the significantly f
 
 Finally, we noticed that optimization almost always improved the timing of the code. It was able to significanltly decrease the time used across both platforms. 
 
-Finally we noticed 
+### Logging functionality
+
+In project 3 we added logging functionality to our code. The logs are added by calling a function called populate_log_item(); Populate log item takes a log_t pointer, log id, profile id, payload pointer, and payload length. Each function can be called without those elements as the populate log checks the log id to determine which elements to use when populating the structure. After being populated the structure is added to a logger queue which is a circular buffer of log_t structures. In some cases, such as in the heartbeat we print immediately rather than adding to the queue. 
