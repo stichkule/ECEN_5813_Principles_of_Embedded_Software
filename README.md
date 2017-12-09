@@ -155,7 +155,7 @@ Uart defines an error checking ```enum UART_status``` as well as the following m
 |                            | 100          | 23.93  | 19.17  | 16.83  | 45.54    | 135.71   | 
 |                            | 1000         | 109.82 | 62.08  | 38.24  | 431.78   | 1294.23  | 
 |                            | 5000         | 490.04 | 251.63 | 132.42 | 2148.39  | 6444.79  | 
-| Memset / Memzero"          | 10           | 16.16  | 15.12  |        | 5.05     | 15.02    | 
+| Memset / Memzero           | 10           | 16.16  | 15.12  |        | 5.05     | 15.02    | 
 |                            | 100          | 24.75  | 20.07  | 21.17  | 35.10    | 105.14   | 
 |                            | 1000         | 110.63 | 63.18  | 74.86  | 335.50   | 1006.27  | 
 |                            | 5000         | 490.52 | 252.29 | 311.71 | 1670.65  | 5012.46  | 
@@ -168,3 +168,12 @@ Uart defines an error checking ```enum UART_status``` as well as the following m
 |                            | 1000         | 107.05 | 11.54  | 71.29  |          |          | 
 |                            | 5000         | 488.57 | 293.16 | 166.7  |          |          | 
 
+### Timing comments
+
+Overall the DMA significantly improved the timing for the KL25Z. Offloading the overhaed made improvements to both memset and memzero. However the benefits were relatively limited for the DMA4 on the 10 bit move, and was worse than standard lib for those functions at small memory as well. This is likely due to the overhead of setting up a dma transfer for such a small amount of memory. 
+
+The BBB was faster than the KL25Z in almost all cases due to the significantly faster A8 architecture. It however, had more outliers. We predict that this is due to the operating system doing context switches or interupting the code in certain areas. Also the stdlib.h memove for 10 bytes was significanlty slower on the BBB, avering around 40us. We predict this is likely due to the architecture compiling in such a way that it used 32bit moves in most cases, which would be inefficent at moving 10 bytes due to the half word size. 
+
+Finally, we noticed that optimization almost always improved the timing of the code. It was able to significanltly decrease the time used across both platforms. 
+
+Finally we noticed 
