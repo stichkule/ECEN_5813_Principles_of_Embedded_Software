@@ -25,10 +25,11 @@
 #ifndef SPI_H_
 #define SPI_H_
 
+#include "MKL25Z4.h"
 #include <stddef.h>
 
-#define WAIT_SPTEF (!(SPI_S_REG(SPI0) & SPI_S_SPTEF_MASK))
-#define WAIT_SPRF (!(SPI_S_REG(SPI0) & SPI_S_SPRF_MASK))
+#define WAIT_SPTEF ((SPI0_S & SPI_S_SPTEF_MASK) != SPI_S_SPTEF_MASK)
+#define WAIT_SPRF ((SPI0_S & SPI_S_SPRF_MASK) != SPI_S_SPRF_MASK)
 
 /**
  * @brief function to initialize GPIO
@@ -49,17 +50,17 @@ void SPI_init(void);
  * @param byte to read into
  * @return none
  */
-void SPI_read_byte(uint8_t byte);
+uint8_t SPI_read_byte(void);
 
 /**
  * @brief function to write byte to SPI
  *
  * This function sends a single byte onto the SPI bus
  *
- * @param byte to be written
- * @return none
+ * @param none
+ * @return byte read
  */
-void SPI_write_byte(uint8_t byte);
+uint8_t SPI_write_byte(uint8_t byte);
 
 /**
  * @brief function to send a packet of bytes over SPI
@@ -67,7 +68,7 @@ void SPI_write_byte(uint8_t byte);
  * This function sends a packet of multiple bytes onto the SPI bus
  *
  * @param byte pointer, no. of bytes to send
- * @return none
+ * @return byte read after write
  */
 void SPI_send_packet(uint8_t * p, size_t length);
 

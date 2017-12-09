@@ -28,10 +28,10 @@
 #include "MKL25Z4.h"
 #include "nrf24.h"
 
-#define nrf_chip_enable() (PTD_BASE_PTR->PCOR |= 1<<0)
-#define nrf_chip_disable() (PTD_BASE_PTR->PSOR |= 1<<0)
-#define nrf_transmit_enable() (!(SPI_S_REG(SPI0) & SPI_S_SPTEF_MASK))
-#define nrf_transmit_disable() (SPI_S_REG(SPI0) & SPI_S_SPTEF_MASK)
+#define nrf_chip_enable() (GPIOD->PCOR |= 1<<0)
+#define nrf_chip_disable() (GPIOD->PSOR |= 1<<0)
+//#define nrf_transmit_enable() (!(SPI_S_REG(SPI0) & SPI_S_SPTEF_MASK))
+//#define nrf_transmit_disable() (SPI_S_REG(SPI0) & SPI_S_SPTEF_MASK)
 
 /**
  * @brief function to read from NRF register

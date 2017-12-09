@@ -98,7 +98,22 @@ CB_status CB_destroy(CB_t* circ_buff);
  * @param pointer to circular buffer
  * @return operation status of circular buffer
  */
-__STATIC_INLINE CB_status CB_is_full(CB_t * circ_buff);
+
+ __STATIC_INLINE CB_status CB_is_full(CB_t * circ_buff) // function to check whether circular buffer is full
+{
+  if(circ_buff == NULL) // null pointer check
+  {
+    return CB_NULL_PTR;
+  }
+  if(circ_buff->size == circ_buff->count)
+  {
+    return CB_FULL;
+  }
+  else
+  {
+    return CB_NO_ERROR;
+  }
+}
 
 /**
  * @brief function to check if circular buffer is empty
@@ -109,7 +124,13 @@ __STATIC_INLINE CB_status CB_is_full(CB_t * circ_buff);
  * @param pointer to circular buffer
  * @return operation status of circular buffer
  */
-__STATIC_INLINE CB_status CB_is_empty(CB_t * circ_buff);
+
+ __STATIC_INLINE CB_status CB_is_empty(CB_t * circ_buff) // function to check whether circular buffer is empty
+{
+  if(circ_buff==NULL||circ_buff->buf==NULL) return CB_NULL_PTR; // null pointer check
+  if(circ_buff->count == 0) return CB_EMPTY;
+  else return CB_NO_ERROR;
+}
 
 /**
  * @brief function to add item to circular buffer

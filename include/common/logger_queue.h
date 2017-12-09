@@ -24,7 +24,7 @@
 #define __LOGGER_QUEUE_H__
 
 #include "logger.h"
-#include "project3.h"
+//#include "project3.h"
 #include "core_cm0plus.h"
 
 
@@ -96,7 +96,21 @@ LQ_status LQ_destroy(log_q* log_queue);
  * @param pointer to log queue
  * @return operation status of log queue
  */
-__STATIC_INLINE LQ_status LQ_is_full(log_q * log_queue);
+__STATIC_INLINE LQ_status LQ_is_full(log_q * log_queue) // function to check whether circular buffer is full
+{
+  if(log_queue == NULL) // null pointer check
+  {
+    return LQ_NULL_PTR;
+  }
+  if(log_queue->size == log_queue->count)
+  {
+    return LQ_FULL;
+  }
+  else
+  {
+    return LQ_NO_ERROR;
+  }
+}
 
 /**
  * @brief function to check if log queue is empty
@@ -107,7 +121,12 @@ __STATIC_INLINE LQ_status LQ_is_full(log_q * log_queue);
  * @param pointer to log queue
  * @return operation status of log queue
  */
-__STATIC_INLINE LQ_status LQ_is_empty(log_q * log_queue);
+__STATIC_INLINE LQ_status LQ_is_empty(log_q * log_queue) // function to check whether circular buffer is empty
+{
+  if(log_queue==NULL||log_queue->buf==NULL) return LQ_NULL_PTR; // null pointer check
+  if(log_queue->count == 0) return LQ_EMPTY;
+  else return LQ_NO_ERROR;
+}
 
 /**
  * @brief function to add item to log queue
