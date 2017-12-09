@@ -7,6 +7,7 @@
 #include "core_cmFunc.h"
 #include "dma.h"
 #include "memory.h"
+#include "project3.h"
 
 uint32_t start_count; // count variables for start and end times
 uint32_t end_count;
@@ -34,7 +35,8 @@ void DMA0_IRQHandler(void)
 	end_count=getcount(); // get count at ISR entry
     // interrupt generated upon DMA transfer completion.
 	// disable interrupts
-	__disable_irq();
+	START_CRITICAL();
+	//__disable_irq();
 	// set return value of DMA IRQ to indicate memory transfer/set is complete
 	DMA_DSR_BCR0 |= DMA_DSR_BCR_DONE_MASK;
 	uint8_t rv_DMA_IRQ = 1;
@@ -42,7 +44,8 @@ void DMA0_IRQHandler(void)
 	//GPIOD->PCOR |= (1<<0); // Clear the pin and write 1 to the ISF flag to clear interrupt
 	//PORTD->PCR[0] |=PORT_PCR_ISF_MASK;
 	// enable interrupts again
-	__enable_irq();
+	END_CRITICAL();
+	//__enable_irq();
 }
 
 int main(void)

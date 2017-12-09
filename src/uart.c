@@ -186,7 +186,8 @@ UART_status UART_receive_n(uint8_t * data_rx, uint16_t length)
  */
 void UART0_IRQHandler(void)
 {
-	__disable_irq();
+	START_CRITICAL();
+//	__disable_irq();
 	if(CB_is_empty(tx_buffer)){UART0_C2 &= ~UART_C2_TIE_MASK;}
 	if((UART0->S1 & UART0_S1_RDRF_MASK)&&CB_is_full(rx_buffer)!=CB_FULL) // if data to be received present in UART register
 	{
@@ -214,5 +215,6 @@ void UART0_IRQHandler(void)
 			UART0_C2 &= ~UART_C2_TIE_MASK;
 		}
 	}
-	__enable_irq();
+	END_CRITICAL();
+	//__enable_irq();
 }

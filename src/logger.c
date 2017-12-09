@@ -167,6 +167,7 @@ void populate_log_item(log_t * log_ptr, uint8_t log_id, uint8_t profile_id, void
 
 void print_log_item(log_t * log_ptr)
 {
+	START_CRITICAL();
 	if(log_ptr->log_id==HEARTBEAT)
 	{
 		LOG_RAW_STRING("HEARTBEAT ");
@@ -225,6 +226,7 @@ void print_log_item(log_t * log_ptr)
 	LOG_RAW_STRING("CHECKSUM: ");
 	LOG_RAW_INT(log_ptr->checksum);
 	LOG_RAW_STRING("\n\r");
+	END_CRITICAL();
 }
 
 void rtc_configure (void)
