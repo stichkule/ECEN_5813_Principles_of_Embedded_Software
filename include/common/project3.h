@@ -21,3 +21,24 @@ extern uint32_t end_count;
 extern uint32_t count_diff;
 //extern uint8_t tx_rv_IRQ;
 
+
+#ifdef KL25Z
+#define START_CIRITICAL() (__disable_irq())
+#define END_CRITICAL() (__enable_irq())
+#endif /* KL25Z */
+
+#ifdef BBB
+#define START_CRITICAL() ()
+#define END_CRITICAL() ()
+#define __STATIC_INLINE
+#define __INLINE
+#endif /* BBB */
+
+#ifdef HOST
+#define START_CRITICAL() ()
+#define END_CRITICAL() ()
+#define __STATIC_INLINE
+#define __INLINE
+#endif /* HOST */
+
+
