@@ -24,6 +24,7 @@
 #include <stdlib.h>
 #include "logger_queue.h"
 #include "project3.h"
+#include "core_cm0plus.h"
 
 LQ_status LQ_init(log_q * log_queue, size_t length) // function to initialize circular buffer
 {
@@ -65,7 +66,7 @@ LQ_status LQ_destroy(log_q* log_queue) // function to destroy circular buffer
   return LQ_NO_ERROR;
 }
 
-LQ_status LQ_is_full(log_q * log_queue) // function to check whether circular buffer is full
+__STATIC_INLINE LQ_status LQ_is_full(log_q * log_queue) // function to check whether circular buffer is full
 {
   if(log_queue == NULL) // null pointer check
   {
@@ -81,7 +82,7 @@ LQ_status LQ_is_full(log_q * log_queue) // function to check whether circular bu
   }
 }
 
-LQ_status LQ_is_empty(log_q * log_queue) // function to check whether circular buffer is empty
+__STATIC_INLINE LQ_status LQ_is_empty(log_q * log_queue) // function to check whether circular buffer is empty
 {
   if(log_queue==NULL||log_queue->buf==NULL) return LQ_NULL_PTR; // null pointer check
   if(log_queue->count == 0) return LQ_EMPTY;
