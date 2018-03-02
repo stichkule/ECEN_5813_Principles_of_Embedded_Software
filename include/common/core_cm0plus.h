@@ -147,6 +147,7 @@
 #include <stdint.h>                      /* standard types definitions                      */
 #include <core_cmInstr.h>                /* Core Instruction Access                         */
 #include <core_cmFunc.h>                 /* Core Function Access                            */
+#include "MKL25Z4.h"
 
 #ifdef __cplusplus
 }

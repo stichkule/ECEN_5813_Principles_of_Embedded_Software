@@ -109,3 +109,73 @@ Uart defines an error checking ```enum UART_status``` as well as the following m
 4. UART_receive
 5. UART_receive_n
 6. UART0_IRQHandler
+
+### BBB Timings
+| Test                       | Size (bytes) | stdlib.h vs. memory.h | Time1 (us) | Time2 (us) | Time3 (us) | Time4 (us) | Time5 (us) | TimeAvg (us) | 
+|----------------------------|--------------|-----------------------|------------|------------|------------|------------|------------|--------------| 
+| Memmove                    | 10           | stdlib.h              | 41         | 41         | 41         | 39         | 40         | 40.4         | 
+|                            |              | memory.h              | 8          | 7          | 7          | 7          | 7          | 7.2          | 
+|                            | 100          | stdlib.h              | 6          | 6          | 6          | 6          | 6          | 6            | 
+|                            |              | memory.h              | 11         | 109        | 12         | 10         | 112        | 50.8         | 
+|                            | 1000         | stdlib.h              | 9          | 9          | 9          | 9          | 10         | 9.2          | 
+|                            |              | memory.h              | 167        | 68         | 68         | 172        | 68         | 108.6        | 
+|                            | 5000         | stdlib.h              | 26         | 25         | 28         | 128        | 126        | 66.6         | 
+|                            |              | memory.h              | 272        | 276        | 277        | 438        | 373        | 327.2        | 
+| "Memset/                   |              |                       |            |            |            |            |            |              | 
+| Memzero"                   | 10           | stdlib.h              | 4          | 3          | 5          | 4          | 4          | 4            | 
+|                            |              | memory.h              | 5          | 5          | 4          | 5          | 5          | 4.8          | 
+|                            | 100          | stdlib.h              | 33         | 101        | 35         | 35         | 35         | 47.8         | 
+|                            |              | memory.h              | 8          | 9          | 8          | 9          | 8          | 8.4          | 
+|                            | 1000         | stdlib.h              | 5          | 5          | 5          | 5          | 6          | 5.2          | 
+|                            |              | memory.h              | 217        | 50         | 50         | 50         | 51         | 83.6         | 
+|                            | 5000         | stdlib.h              | 107        | 9          | 9          | 10         | 9          | 28.8         | 
+|                            |              | memory.h              | 237        | 237        | 238        | 237        | 237        | 237.2        | 
+| Optimized Memmove          | 10           | stdlib.h              | 41         | 42         | 42         | 42         | 41         | 41.6         | 
+|                            |              | memory.h              | 6          | 5          | 5          | 5          | 5          | 5.2          | 
+|                            | 100          | stdlib.h              | 7          | 8          | 7          | 7          | 7          | 7.2          | 
+|                            |              | memory.h              | 6          | 7          | 5          | 5          | 6          | 5.8          | 
+|                            | 1000         | stdlib.h              | 8          | 9          | 10         | 9          | 9          | 9            | 
+|                            |              | memory.h              | 18         | 18         | 18         | 17         | 17         | 17.6         | 
+|                            | 5000         | stdlib.h              | 27         | 27         | 21         | 25         | 23         | 24.6         | 
+|                            |              | memory.h              | 59         | 60         | 59         | 58         | 58         | 58.8         | 
+| Optimized Memmove / Memset | 10           | stdlib.h              | 4          | 4          | 3          | 4          | 3          | 3.6          | 
+|                            |              | memory.h              | 4          | 4          | 4          | 4          | 4          | 4            | 
+|                            | 100          | stdlib.h              | 32         | 32         | 32         | 34         | 32         | 32.4         | 
+|                            |              | memory.h              | 4          | 5          | 4          | 5          | 4          | 4.4          | 
+|                            | 1000         | stdlib.h              | 4          | 4          | 4          | 5          | 5          | 4.4          | 
+|                            |              | memory.h              | 13         | 14         | 14         | 14         | 14         | 13.8         | 
+|                            | 5000         | stdlib.h              | 9          | 9          | 9          | 10         | 9          | 9.2          | 
+|                            |              | memory.h              | 53         | 54         | 53         | 54         | 54         | 53.6         | 
+
+### KL25Z Timings
+
+| DMA Test                   | Size (bytes) | DMA 1  | DMA 2  | DMA 4  | stdlib.h | memory.h | 
+|----------------------------|--------------|--------|--------|--------|----------|----------| 
+| Memmove                    | 10           | 15.4   | 13.73  |        | 6.91     | 19.84    | 
+|                            | 100          | 23.93  | 19.17  | 16.83  | 45.54    | 135.71   | 
+|                            | 1000         | 109.82 | 62.08  | 38.24  | 431.78   | 1294.23  | 
+|                            | 5000         | 490.04 | 251.63 | 132.42 | 2148.39  | 6444.79  | 
+| Memset / Memzero           | 10           | 16.16  | 15.12  |        | 5.05     | 15.02    | 
+|                            | 100          | 24.75  | 20.07  | 21.17  | 35.10    | 105.14   | 
+|                            | 1000         | 110.63 | 63.18  | 74.86  | 335.50   | 1006.27  | 
+|                            | 5000         | 490.52 | 252.29 | 311.71 | 1670.65  | 5012.46  | 
+| Optimized Memmove          | 10           | 12.21  | 11.82  | 11.11  |          |          | 
+|                            | 100          | 20.79  | 16.02  | 13.64  |          |          | 
+|                            | 1000         | 106.61 | 11.25  | 35.09  |          |          | 
+|                            | 5000         | 488.14 | 249.72 | 130.51 |          |          | 
+| Optimized Memmove / Memset | 10           | 11.73  | 11.25  | 11.58  |          |          | 
+|                            | 100          | 21.27  | 11.58  | 17.69  |          |          | 
+|                            | 1000         | 107.05 | 11.54  | 71.29  |          |          | 
+|                            | 5000         | 488.57 | 293.16 | 166.7  |          |          | 
+
+### Timing comments
+
+Overall the DMA significantly improved the timing for the KL25Z. Offloading the overhaed made improvements to both memset and memzero. However the benefits were relatively limited for the DMA4 on the 10 bit move, and was worse than standard lib for those functions at small memory as well. This is likely due to the overhead of setting up a dma transfer for such a small amount of memory. 
+
+The BBB was faster than the KL25Z in almost all cases due to the significantly faster A8 architecture. It however, had more outliers. We predict that this is due to the operating system doing context switches or interupting the code in certain areas. Also the stdlib.h memove for 10 bytes was significanlty slower on the BBB, avering around 40us. We predict this is likely due to the architecture compiling in such a way that it used 32bit moves in most cases, which would be inefficent at moving 10 bytes due to the half word size. 
+
+Finally, we noticed that optimization almost always improved the timing of the code. It was able to significanltly decrease the time used across both platforms. 
+
+### Logging functionality
+
+In project 3 we added logging functionality to our code. The logs are added by calling a function called populate_log_item(); Populate log item takes a log_t pointer, log id, profile id, payload pointer, and payload length. Each function can be called without those elements as the populate log checks the log id to determine which elements to use when populating the structure. After being populated the structure is added to a logger queue which is a circular buffer of log_t structures. In some cases, such as in the heartbeat we print immediately rather than adding to the queue. 

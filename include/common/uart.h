@@ -48,7 +48,7 @@ typedef enum
  * @param none
  * @return UART_status -- failed or success
  */
-UART_status UART_configure(void);
+void UART_configure(void);
 
 /**
  * @brief function to transmit single data byte through the UART
@@ -57,7 +57,7 @@ UART_status UART_configure(void);
  * This function blocks on trasmitting data.
  *
  * @param pointer to data being transmitted
- * @return UART_status -- failed or success
+ * @return none
  */
 UART_status UART_send(uint8_t * data);
 

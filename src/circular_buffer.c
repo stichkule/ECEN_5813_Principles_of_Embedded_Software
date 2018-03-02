@@ -22,8 +22,10 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include "circular_buffer.h"
+#include "project3.h"
+#include "core_cm0plus.h"
 
-CB_status CB_init(CB_t * circ_buff, uint16_t length) // function to initialize circular buffer
+CB_status CB_init(CB_t * circ_buff, int16_t length) // function to initialize circular buffer
 {
   if(circ_buff == NULL) // null pointer check
   {
@@ -61,29 +63,6 @@ CB_status CB_destroy(CB_t* circ_buff) // function to destroy circular buffer
   circ_buff->tail = circ_buff->head;
   circ_buff = NULL;
   return CB_NO_ERROR;
-}
-
-CB_status CB_is_full(CB_t * circ_buff) // function to check whether circular buffer is full
-{
-  if(circ_buff == NULL) // null pointer check
-  { 
-    return CB_NULL_PTR;
-  }
-  if(circ_buff->size == circ_buff->count)
-  {
-    return CB_FULL;
-  }
-  else
-  {
-    return CB_NO_ERROR;
-  }
-}
-
-CB_status CB_is_empty(CB_t * circ_buff) // function to check whether circular buffer is empty
-{
-  if(circ_buff==NULL||circ_buff->buf==NULL) return CB_NULL_PTR; // null pointer check
-  if(circ_buff->count == 0) return CB_EMPTY;
-  else return CB_NO_ERROR;
 }
 
 CB_status CB_buffer_add_item(CB_t * circ_buff, uint8_t data) // function to add item to circular buffer
@@ -132,7 +111,7 @@ CB_status CB_buffer_remove_item(CB_t * circ_buff, uint8_t* data_ptr) // function
   return CB_NO_ERROR;
 }
 
-CB_status CB_peek(CB_t * circ_buff, uint16_t location, uint8_t * data_ptr)
+CB_status CB_peek(CB_t * circ_buff, int16_t location, uint8_t * data_ptr)
 {
   if(circ_buff == NULL || data_ptr == NULL || circ_buff->buf == NULL)
   {

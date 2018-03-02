@@ -28,6 +28,8 @@
 #ifndef __CIRCULAR_BUFFER_H__
 #define __CIRCULAR_BUFFER_H__
 
+#include <project3.h>
+#include "core_cm0plus.h"
 /** This typedef defines a data type CB_t, to represent a struct corresponding to
  * the circular buffer. The elements of the struct are:
  * buf -- pointer to uint8_t data contained within the buffer
@@ -74,7 +76,7 @@ typedef enum
  * @param pointer to circular buffer, length
  * @return operation status of circular buffer
  */
-CB_status CB_init(CB_t * circ_buff, uint16_t length);
+CB_status CB_init(CB_t * circ_buff, int16_t length);
 
 /**
  * @brief function to destroy circular buffer
@@ -96,7 +98,22 @@ CB_status CB_destroy(CB_t* circ_buff);
  * @param pointer to circular buffer
  * @return operation status of circular buffer
  */
-CB_status CB_is_full(CB_t * circ_buff);
+
+ __STATIC_INLINE CB_status CB_is_full(CB_t * circ_buff) // function to check whether circular buffer is full
+{
+  if(circ_buff == NULL) // null pointer check
+  {
+    return CB_NULL_PTR;
+  }
+  if(circ_buff->size == circ_buff->count)
+  {
+    return CB_FULL;
+  }
+  else
+  {
+    return CB_NO_ERROR;
+  }
+}
 
 /**
  * @brief function to check if circular buffer is empty
@@ -107,7 +124,13 @@ CB_status CB_is_full(CB_t * circ_buff);
  * @param pointer to circular buffer
  * @return operation status of circular buffer
  */
-CB_status CB_is_empty(CB_t * circ_buff);
+
+ __STATIC_INLINE CB_status CB_is_empty(CB_t * circ_buff) // function to check whether circular buffer is empty
+{
+  if(circ_buff==NULL||circ_buff->buf==NULL) return CB_NULL_PTR; // null pointer check
+  if(circ_buff->count == 0) return CB_EMPTY;
+  else return CB_NO_ERROR;
+}
 
 /**
  * @brief function to add item to circular buffer
@@ -143,6 +166,6 @@ CB_status CB_buffer_remove_item(CB_t * circ_buff, uint8_t* data_ptr);
  * data 
  * @return operation status of circular buffer
  */
-CB_status CB_peek(CB_t * circ_buff, uint16_t location, uint8_t * data_ptr);
+CB_status CB_peek(CB_t * circ_buff, int16_t location, uint8_t * data_ptr);
 
 #endif /* __CIRCULAR_BUFFER_H__ */
